@@ -33,6 +33,24 @@
     line-height: 12px;
     width: 150px;
   }
+
+  .range-container {
+    display: inline-block;
+  }
+  .ticks {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 77px;
+    margin-right: 9px;
+  }
+  .tick {
+    height: 20px;
+    width: 1px;
+    display: block;
+    position: relative;
+    background: #bbb;
+  }
+
   </style>
 </head>
 
@@ -436,11 +454,24 @@
     for (let i = 0; i < params.length; i++) {
       const param = params[i];
       const sysexValue = param.valueFn ? param.valueFn(param.value) : param.value;
+
+      let ticksHtml = '';
+      if      (param.range == 100) ticks = 11;
+      else if (param.range == 128) ticks = 9;
+      else if (param.range == 64)  ticks = 9;
+      else                         ticks = param.range;
+      for (let j = 0; j < ticks; j++) {
+        ticksHtml += `<span class='tick'></span>`
+      }
+
       editorHtml += `
         <tr class='param'>
           <td class='label'>${param.name}:</td> 
           <td>
-            <input data-idx='${i}' type='range' min='0' max='${param.range - 1}' value='${param.value}'/> 
+            <div class='range-container'>
+              <div class='ticks'>${ticksHtml}</div>
+              <input data-idx='${i}' type='range' min='0' max='${param.range - 1}' value='${param.value}'/> 
+            </div>
             <span class='sysex-value-${i}'>${displayValues(param.value, sysexValue)}</span>
           </td>
         </tr>
