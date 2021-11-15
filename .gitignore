@@ -1,0 +1,4 @@
+*.pdf
+*.zip
+node_modules/
+dist/
