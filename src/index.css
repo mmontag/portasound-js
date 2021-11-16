@@ -1,13 +1,52 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url("pss-range.css");
+
+:root {
+  --cyan: #20c8a9;
+  --yellow: #dac20c;
+  --tick-height: 20px;
+  --range-width: 285px;
+  --range-thumb-width: 85px;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #ccc;
+  background: #333;
+}
+
+* {
+  font-variant-numeric: tabular-nums;
+}
+
+.gray {
+  color: #aaa;
+}
+
+.label {
+  color: #ccc;
+  text-transform: uppercase;
+  font-size: 11px;
+  line-height: 12px;
+  width: 150px;
+  padding-top: var(--tick-height);
+}
+
+.range-container {
+  display: inline-block;
+}
+
+.ticks {
+  display: flex;
+  justify-content: space-between;
+  margin-left: calc(var(--range-thumb-width) - 8px);
+  margin-right: 9px;
+}
+
+.tick {
+  height: var(--tick-height);
+  width: 1px;
+  display: block;
+  position: relative;
+  background: #bbb;
 }
