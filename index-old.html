@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+  <title>Portasound JS</title>
+  <script crossorigin="anonymous"
+          integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
+          referrerpolicy="no-referrer" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+  <style>
+
+  </style>
+</head>
+
+<body>
+<h1>PortaSound PSS Sysex Editor</h1>
+<img src="images/pss-480-yellow.png" width="500"/>
+<p>
+  MIDI Device: <select id="midiOutput"></select>
+</p>
+<table id="editor"></table>
+<script>
+  /****** MIDI device code ******/
+  let midi = null; // global MIDIAccess object
+  let midiOutput = null;
+  let midiOutputSelectorEl = document.querySelector('#midiOutput');
+  navigator.requestMIDIAccess({ sysex: true }).then(onMIDISuccess);
+
+  midiOutputSelectorEl.addEventListener('change', ev => {
+    midiOutput = midi.outputs.get(midiOutputSelectorEl.value);
+    localStorage.setItem('midiOutputDevice', midiOutputSelectorEl.value);
+  });
+
+  function onMIDISuccess(midiAccess) {
+    const logMidi = o => console.debug(`[MIDI ${o.type}] id: ${o.id.padEnd(14, ' ')} ` +
+      `manufacturer: ${o.manufacturer.padEnd(20, ' ')} name: ${o.name.padEnd(20, ' ')}`);
+    for (var entry of midiAccess.inputs) logMidi(entry[1]);
+    for (var entry of midiAccess.outputs) logMidi(entry[1]);
+
+    let midiOutputHtml = '';
+    for (let entry of midiAccess.outputs) {
+      let output = entry[1];
+      midiOutputHtml += `
+        <option value='${output.id}'>${output.name}</option>`;
+    }
+    midiOutputSelectorEl.innerHTML = midiOutputHtml;
+    midi = midiAccess;
+
+    const storedMidiDevice = localStorage.getItem('midiOutputDevice');
+    if (storedMidiDevice) {
+      midiOutputSelectorEl.value = storedMidiDevice;
+      midiOutputSelectorEl.dispatchEvent(new Event('change'));
+    }
+  }
+
+  /****** Sysex code ******/
+
+  /****** GUI code ******/
+  let editorEl = document.querySelector('#editor');
+
+  function updateEditor() {
+    let editorHtml = '';
+    for (let i = 0; i < params.length; i++) {
+      const param = params[i];
+      const sysexValue = param.valueFn ? param.valueFn(param.value) : param.value;
+
+      let ticksHtml = '';
+      if (param.range == 100) ticks = 11;
+      else if (param.range == 128) ticks = 9;
+      else if (param.range == 64) ticks = 9;
+      else ticks = param.range;
+      for (let j = 0; j < ticks; j++) {
+        ticksHtml += `<span class='tick'></span>`
+      }
+
+      editorHtml += `
+        <tr class='param'>
+          <td class='label'>${param.name}:</td> 
+          <td class='range-container'>
+              <div class='ticks'>${ticksHtml}</div>
+              <input data-idx='${i}' type='range' min='0' max='${param.range - 1}' value='${param.value}'/> 
+          </td>
+          <td class='label'>
+            <span id='sysex-value-${i}'>${displayValues(param.value, sysexValue)}</span>
+          </td>
+        </tr>
+      `;
+    }
+    editorEl.innerHTML = editorHtml;
+  }
+
+  updateEditor();
+
+  function displayValues(value, sysexValue) {
+    return `${value.toString().padStart(2, '0')} <span class="gray">${(sysexValue | 0).toString(2).padStart(8, '0')}</span>`;
+  }
+
+  editorEl.addEventListener('input', ev => {
+    const idx = parseInt(ev.target.dataset['idx'], 10);
+    const param = params[idx];
+    const bankNum = parseInt(params[0].value);
+    const sysexValueEl = document.querySelector('#sysex-value-' + idx);
+
+    param.value = ev.target.value;
+    const sysexValue = param.valueFn ? param.valueFn(param.value) : param.value;
+    sysexValueEl.innerHTML = displayValues(param.value, sysexValue);
+
+    sendSysex(bankNum, buildSysex(params));
+
+  });
+</script>
+</body>
+
+</html>
