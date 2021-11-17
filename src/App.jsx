@@ -1,15 +1,19 @@
 import React from 'react';
 import './App.css';
-import { paramsPss480 } from './portasound';
+import { paramsPss480, buildSysex, sendSysex } from './portasound';
+
+const MIDI_OUTPUT_ID_KEY = "midiOutputId";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
+    this.midiAccess = null; // WebMIDI object for internal access to MIDI devices
     this.state = {
-      midiOutputs: [],
+      midiOutputs: [], // For UI/display only; midiAccess.outputs converted to array
+      midiOutputId: 0, // For UI/display only, also used in localstorage
       sysexParams: paramsPss480,
-    }
+    };
   }
 
   componentDidMount() {
@@ -17,8 +21,8 @@ class App extends React.Component {
   }
 
   handleMidiOutputChange = (e) => {
-    this.midiOutput = this.midiAccess.outputs.get(e.target.value);
-    localStorage.setItem('midiOutputDevice', e.target.value);
+    this.setState({ midiOutputId: e.target.value });
+    localStorage.setItem(MIDI_OUTPUT_ID_KEY, e.target.value);
   }
 
   onMIDISuccess = (midiAccess) => {
@@ -35,20 +39,10 @@ class App extends React.Component {
     this.midiAccess = midiAccess;
     this.setState({ midiOutputs: outputs });
 
-    // let midiOutputHtml = '';
-    // for (let entry of midiAccess.outputs) {
-    //   let output = entry[1];
-    //   midiOutputHtml += `
-    //   <option value='${output.id}'>${output.name}</option>`;
-    // }
-    // midiOutputSelectorEl.innerHTML = midiOutputHtml;
-    // midi = midiAccess;
-    //
-    // const storedMidiDevice = localStorage.getItem('midiOutputDevice');
-    // if (storedMidiDevice) {
-    //   midiOutputSelectorEl.value = storedMidiDevice;
-    //   midiOutputSelectorEl.dispatchEvent(new Event('change'));
-    // }
+    const storedMidiOutputId = localStorage.getItem(MIDI_OUTPUT_ID_KEY);
+    if (storedMidiOutputId) {
+      this.setState({ midiOutputId: storedMidiOutputId });
+    }
   }
 
   displayValues(value, sysexValue) {
@@ -59,25 +53,31 @@ class App extends React.Component {
     );
   }
 
-  handleParamChange(idx, value) {
+  handleParamChange = (idx, value) => {
     const params = this.state.sysexParams;
     const param = params[idx];
     const bankNum = parseInt(params[0].value);
-    param.value = value;
 
-    sendSysex(bankNum, buildSysex(params));
+    param.value = value;
+    this.setState({ sysexParams: params });
+
+    sendSysex(this.getMidiOutput(), bankNum, buildSysex(params));
+  }
+
+  getMidiOutput = () => {
+    return this.midiAccess.outputs.get(this.state.midiOutputId);
   }
 
   render() {
-    const { sysexParams, midiOutputs } = this.state;
+    const { sysexParams, midiOutputs, midiOutputId } = this.state;
 
     return (
       <div className="App">
         <h1>PortaSound PSS Sysex Editor</h1>
-        <img src="/images/pss-480-yellow.png" width="500"/>
+        <img src="/images/pss-480-yellow.png" width="500" alt="PSS-480"/>
         <p>
           MIDI Device:
-          <select id="midiOutput" onChange={this.handleMidiOutputChange}>
+          <select id="midiOutput" value={midiOutputId} onChange={this.handleMidiOutputChange}>
             {midiOutputs.map(output => (
               <option key={output.id} value={output.id}>{output.name}</option>
             ))}
@@ -116,4 +116,4 @@ class App extends React.Component {
   }
 }
 
-export default App
+export default App;
