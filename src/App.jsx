@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { paramsPss480, buildSysex, sendSysex } from './portasound';
+import { buildSysex, paramsPss480, sendSysex } from './portasound';
 
 const MIDI_OUTPUT_ID_KEY = "midiOutputId";
 
@@ -45,14 +45,6 @@ class App extends React.Component {
     }
   }
 
-  displayValues(value, sysexValue) {
-    return (
-      <>{value.toString().padStart(2, '0')}
-        <span className="gray">{(sysexValue | 0).toString(2).padStart(8, '0')}</span>
-      </>
-    );
-  }
-
   handleParamChange = (idx, value) => {
     const params = this.state.sysexParams;
     const param = params[idx];
@@ -87,6 +79,8 @@ class App extends React.Component {
           <tbody>
           {sysexParams.map((param, i) => {
             const sysexValue = param.valueFn ? param.valueFn(param.value) : param.value;
+            const sysexBinary = (sysexValue | 0).toString(2).padStart(8, '0');
+            const displayValue = param.value.toString().padStart(2, '0');
 
             let ticks;
             if (param.range === 100) ticks = 11;
@@ -103,8 +97,8 @@ class App extends React.Component {
                          value={param.value}
                          onChange={(e) => this.handleParamChange(i, e.target.value)}/>
                 </td>
-                <td className='label'>
-                  <span id={'sysex-value-' + i}>{this.displayValues(param.value, sysexValue)}</span>
+                <td className='label' title={sysexBinary}>
+                  {displayValue}
                 </td>
               </tr>
             )
