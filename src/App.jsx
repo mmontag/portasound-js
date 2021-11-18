@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import { buildSysex, paramsPss480, sendSysex } from './portasound';
+import PortasoundSlider from './PortasoundSlider';
 
 const MIDI_OUTPUT_ID_KEY = "midiOutputId";
 
@@ -82,20 +83,12 @@ class App extends React.Component {
             const sysexBinary = (sysexValue | 0).toString(2).padStart(8, '0');
             const displayValue = param.value.toString().padStart(2, '0');
 
-            let ticks;
-            if (param.range === 100) ticks = 11;
-            else if (param.range === 128) ticks = 9;
-            else if (param.range === 64) ticks = 9;
-            else ticks = param.range;
-
             return (
               <tr key={i} className='param'>
+
                 <td className='label'>{param.name}:</td>
-                <td className='range-container'>
-                  <div className='ticks'>{[...Array(ticks)].map((_, i) => <span key={i} className='tick'/>)}</div>
-                  <input data-idx={i} type='range' min='0' max={param.range - 1}
-                         value={param.value}
-                         onChange={(e) => this.handleParamChange(i, e.target.value)}/>
+                <td>
+                  <PortasoundSlider param={param} handleParamChange={(e) => this.handleParamChange(i, e.target.value)} />
                 </td>
                 <td className='label' title={sysexBinary}>
                   {displayValue}
