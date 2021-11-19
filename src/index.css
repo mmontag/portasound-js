@@ -6,13 +6,14 @@
   --tick-height: 20px;
   --range-width: 285px;
   --range-thumb-width: 85px;
+  --bg: #333;
 }
 
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   color: #ccc;
-  background: #333;
+  background: var(--bg);
 }
 
 * {
@@ -28,6 +29,10 @@ body {
   text-transform: uppercase;
   font-size: 11px;
   line-height: 12px;
+  user-select: none;
+}
+
+.range-container .label {
   width: 150px;
   padding-top: var(--tick-height);
 }
@@ -49,4 +54,45 @@ body {
   display: block;
   position: relative;
   background: #bbb;
+}
+
+.button-lamp {
+  display: inline-block;
+  height: 7px;
+  width: 7px;
+  margin: 4px 5px 6px 0;
+  border-radius: 6px;
+  background-color: #666;
+  outline: 1px solid #0008;
+  vertical-align: middle;
+  box-shadow: inset -1px -1px 4px #0008;
+}
+
+.button-lamp.on {
+  background-color: #f22;
+  box-shadow: none;
+}
+
+.button-container {
+  display: inline-block;
+  padding: 4px 0;
+}
+
+.button-container button {
+  margin: 4px;
+  border: 1px solid #0004;
+  /*border: 0;*/
+  border-radius: 2.5px;
+  box-sizing: border-box;
+  /*background-color: #be4f42;*/
+  /*background-color: #20c8a9;*/
+  background-color: #aaa;
+  box-shadow: 0 2px 0 1px #000a, 0 3px 0 1px #fff4, 0 0 0px 3px var(--bg), 0 0 0 4px #0006, inset 0 1px 0 0 #fff4;
+  width: 76px;
+  height: 12px;
+}
+.button-container button:active {
+  border: 1px solid #0008;
+  background-color: #888;
+  box-shadow: 0 2px 0 1px var(--bg), 0 3px 0 1px #fff4, 0 0 0px 3px var(--bg), 0 0 0 4px #0006;
 }

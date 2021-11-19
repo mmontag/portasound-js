@@ -112,6 +112,7 @@ const paramsPss480 = [
   },
   {
     name: 'Amplitude Modulation Enable (Modulator)',
+    shortName: 'Amp. Mod.',
     range: 2,
     sysexByte: 9,
     sysexBit: 7,
@@ -119,6 +120,7 @@ const paramsPss480 = [
   },
   {
     name: 'Amplitude Modulation Enable (Carrier)',
+    shortName: 'Amp. Mod.',
     range: 2,
     sysexByte: 10,
     sysexBit: 7,
@@ -126,6 +128,7 @@ const paramsPss480 = [
   },
   {
     name: 'Coarse Detune Enable (Modulator)',
+    shortName: 'Coarse Det.',
     range: 2,
     sysexByte: 9,
     sysexBit: 6,
@@ -133,6 +136,7 @@ const paramsPss480 = [
   },
   {
     name: 'Coarse Detune Enable (Carrier)',
+    shortName: 'Coarse Det.',
     range: 2,
     sysexByte: 10,
     sysexBit: 6,
@@ -249,6 +253,7 @@ const paramsPss480 = [
   },
   {
     name: 'Vibrato Delay Time',
+    shortName: 'Vib. Delay',
     range: 128,
     sysexByte: 22,
     sysexBit: 0,
@@ -256,6 +261,7 @@ const paramsPss480 = [
   },
   {
     name: 'Vibrato Enable',
+    shortName: 'Vibrato',
     range: 2,
     sysexByte: 24,
     sysexBit: 7,
@@ -263,6 +269,7 @@ const paramsPss480 = [
   },
   {
     name: 'Sustain Enable',
+    shortName: 'Sustain',
     range: 2,
     sysexByte: 24,
     sysexBit: 6,
