@@ -16,6 +16,11 @@ body {
   background: var(--bg);
 }
 
+img {
+  /*noinspection CssInvalidPropertyValue*/
+  image-rendering: -webkit-optimize-contrast;
+}
+
 * {
   font-variant-numeric: tabular-nums;
 }
@@ -24,12 +29,21 @@ body {
   color: #aaa;
 }
 
-.label {
+header h1, .label {
   color: #ccc;
   text-transform: uppercase;
   font-size: 11px;
   line-height: 12px;
   user-select: none;
+  font-weight: normal;
+}
+header {
+  display: flex;
+  flex-direction: column;
+  width: 324px;
+}
+header h1 {
+  text-align-last: justify;
 }
 
 .range-container .label {

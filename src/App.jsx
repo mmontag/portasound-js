@@ -67,10 +67,13 @@ class App extends React.Component {
 
     return (
       <div className="App">
-        <h1>PortaSound PSS Sysex Editor</h1>
-        <img src="/images/pss-480-yellow.png" width="500" alt="PSS-480"/>
+        <header>
+          <img src="/images/portasound-cyan.png" alt="Portasound"/>
+          <img src="/images/pss-480-yellow.png" alt="PSS-480"/>
+          <h1>Sysex Editor for Portasound Series Keyboards</h1>
+        </header>
         <p>
-          MIDI Device:
+          MIDI Device:{' '}
           <select id="midiOutput" value={midiOutputId} onChange={this.handleMidiOutputChange}>
             {midiOutputs.map(output => (
               <option key={output.id} value={output.id}>{output.name}</option>
@@ -86,7 +89,7 @@ class App extends React.Component {
 
             return (
               <tr key={i} className='param'>
-                <td className='label'>{param.name}:</td>
+                <td className='label'>[{i}] {param.name}:</td>
                 <td>
                   {param.range === 2 ?
                     <PortasoundButton {...param}
