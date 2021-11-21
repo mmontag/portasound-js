@@ -3,6 +3,7 @@ import { debounce } from 'lodash-es';
 const paramsPss480 = [
   {
     name: 'Bank Number',
+    shortName: 'Bank',
     range: 5,
     sysexByte: 0,
     sysexBit: 0,
@@ -10,6 +11,7 @@ const paramsPss480 = [
   },
   {
     name: 'Fine Detune (Modulator)',
+    shortName: 'Detune',
     range: 15,
     sysexByte: 1,
     sysexBit: 4,
@@ -18,6 +20,7 @@ const paramsPss480 = [
   },
   {
     name: 'Fine Detune (Carrier)',
+    shortName: 'Detune',
     range: 15,
     sysexByte: 2,
     sysexBit: 4,
@@ -26,6 +29,7 @@ const paramsPss480 = [
   },
   {
     name: 'Multiplier (Modulator)',
+    shortName: 'Freq',
     range: 16,
     sysexByte: 1,
     sysexBit: 0,
@@ -33,6 +37,7 @@ const paramsPss480 = [
   },
   {
     name: 'Multiplier (Carrier)',
+    shortName: 'Freq',
     range: 16,
     sysexByte: 2,
     sysexBit: 0,
@@ -40,6 +45,7 @@ const paramsPss480 = [
   },
   {
     name: 'Total Level (Modulator)',
+    shortName: 'Level',
     range: 100,
     sysexByte: 3,
     sysexBit: 0,
@@ -48,6 +54,7 @@ const paramsPss480 = [
   },
   {
     name: 'Total Level (Carrier)',
+    shortName: 'Level',
     range: 100,
     sysexByte: 4,
     sysexBit: 0,
@@ -56,6 +63,7 @@ const paramsPss480 = [
   },
   { // TODO: map to linear scaling; 0 is middle value
     name: 'Level Key Scaling (Hi) (Modulator)',
+    shortName: 'Level (Hi)',
     range: 16,
     sysexByte: 5,
     sysexBit: 4,
@@ -63,6 +71,7 @@ const paramsPss480 = [
   },
   {
     name: 'Level Key Scaling (Lo) (Modulator)',
+    shortName: 'Level (Lo)',
     range: 16,
     sysexByte: 5,
     sysexBit: 0,
@@ -70,6 +79,7 @@ const paramsPss480 = [
   },
   {
     name: 'Level Key Scaling (Hi) (Carrier)',
+    shortName: 'Level (Hi)',
     range: 16,
     sysexByte: 6,
     sysexBit: 4,
@@ -77,6 +87,7 @@ const paramsPss480 = [
   },
   {
     name: 'Level Key Scaling (Lo) (Carrier)',
+    shortName: 'Level (Lo)',
     range: 16,
     sysexByte: 6,
     sysexBit: 0,
@@ -84,6 +95,7 @@ const paramsPss480 = [
   },
   {
     name: 'Rate Key Scaling (Modulator)',
+    shortName: 'Rate',
     range: 4,
     sysexByte: 7,
     sysexBit: 6,
@@ -91,6 +103,7 @@ const paramsPss480 = [
   },
   {
     name: 'Rate Key Scaling (Carrier)',
+    shortName: 'Rate',
     range: 4,
     sysexByte: 8,
     sysexBit: 6,
@@ -98,6 +111,7 @@ const paramsPss480 = [
   },
   {
     name: 'Attack Rate (Modulator)',
+    shortName: 'Attack',
     range: 64,
     sysexByte: 7,
     sysexBit: 0,
@@ -105,6 +119,7 @@ const paramsPss480 = [
   },
   {
     name: 'Attack Rate (Carrier)',
+    shortName: 'Attack',
     range: 64,
     sysexByte: 8,
     sysexBit: 0,
@@ -120,7 +135,7 @@ const paramsPss480 = [
   },
   {
     name: 'Amplitude Modulation Enable (Carrier)',
-    shortName: 'Amp. Mod.',
+    shortName: 'Amp. Mod. Enable',
     range: 2,
     sysexByte: 10,
     sysexBit: 7,
@@ -128,7 +143,7 @@ const paramsPss480 = [
   },
   {
     name: 'Coarse Detune Enable (Modulator)',
-    shortName: 'Coarse Det.',
+    shortName: 'Coarse Det. Enable',
     range: 2,
     sysexByte: 9,
     sysexBit: 6,
@@ -144,6 +159,7 @@ const paramsPss480 = [
   },
   {
     name: 'Decay 1 Rate (Modulator)',
+    shortName: 'Decay 1',
     range: 64,
     sysexByte: 9,
     sysexBit: 0,
@@ -151,6 +167,7 @@ const paramsPss480 = [
   },
   {
     name: 'Decay 1 Rate (Carrier)',
+    shortName: 'Decay 1',
     range: 64,
     sysexByte: 10,
     sysexBit: 0,
@@ -158,6 +175,7 @@ const paramsPss480 = [
   },
   {
     name: 'Sine Table Form (Modulator)',
+    shortName: 'Waveform',
     range: 4,
     sysexByte: 11,
     sysexBit: 6,
@@ -165,6 +183,7 @@ const paramsPss480 = [
   },
   {
     name: 'Sine Table Form (Carrier)',
+    shortName: 'Waveform',
     range: 4,
     sysexByte: 12,
     sysexBit: 6,
@@ -172,6 +191,7 @@ const paramsPss480 = [
   },
   {
     name: 'Decay 2 Rate (Modulator)',
+    shortName: 'Decay 2',
     range: 64,
     sysexByte: 11,
     sysexBit: 0,
@@ -179,6 +199,7 @@ const paramsPss480 = [
   },
   {
     name: 'Decay 2 Rate (Carrier)',
+    shortName: 'Decay 2',
     range: 64,
     sysexByte: 12,
     sysexBit: 0,
@@ -187,6 +208,7 @@ const paramsPss480 = [
 
   {
     name: 'Decay 1 Level (Modulator)',
+    shortName: 'Sustain',
     range: 16,
     sysexByte: 13,
     sysexBit: 4,
@@ -195,6 +217,7 @@ const paramsPss480 = [
   },
   {
     name: 'Decay 1 Level (Carrier)',
+    shortName: 'Sustain',
     range: 16,
     sysexByte: 14,
     sysexBit: 4,
@@ -204,6 +227,7 @@ const paramsPss480 = [
 
   {
     name: 'Release Rate (Modulator)',
+    shortName: 'Release',
     range: 16,
     sysexByte: 13,
     sysexBit: 0,
@@ -211,6 +235,7 @@ const paramsPss480 = [
   },
   {
     name: 'Release Rate (Carrier)',
+    shortName: 'Release',
     range: 16,
     sysexByte: 14,
     sysexBit: 0,
@@ -218,6 +243,7 @@ const paramsPss480 = [
   },
   {
     name: 'Feedback',
+    shortName: 'Feedback',
     range: 8,
     sysexByte: 15,
     sysexBit: 3,
@@ -225,6 +251,7 @@ const paramsPss480 = [
   },
   {
     name: 'Pitch Modulation Sensitivity (Vibrato)',
+    shortName: 'Pitch Mod. Sens',
     range: 8,
     sysexByte: 16,
     sysexBit: 4,
@@ -232,6 +259,7 @@ const paramsPss480 = [
   },
   {
     name: 'Amplitude Modulation Sensitivity (Tremolo)',
+    shortName: 'Level Mod. Sens',
     range: 4,
     sysexByte: 16,
     sysexBit: 0,
@@ -239,6 +267,7 @@ const paramsPss480 = [
   },
   {
     name: 'Sustain Release Rate (Modulator)',
+    shortName: 'Sus. Release',
     range: 16,
     sysexByte: 20,
     sysexBit: 0,
@@ -246,6 +275,7 @@ const paramsPss480 = [
   },
   {
     name: 'Sustain Release Rate (Carrier)',
+    shortName: 'Sus. Release',
     range: 16,
     sysexByte: 21,
     sysexBit: 0,
