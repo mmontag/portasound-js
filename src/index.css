@@ -4,15 +4,19 @@
   --cyan: #20c8a9;
   --yellow: #dac20c;
   --tick-height: 20px;
-  --range-width: 285px;
+  --range-height: 64px;
+  --range-width: 194px;
   --range-thumb-width: 85px;
   --bg: #333;
+  --text: #ccc;
+  --lighter: #666;
+  --darker: #222;
 }
 
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  color: #ccc;
+  color: var(--text);
   background: var(--bg);
 }
 
@@ -29,8 +33,17 @@ img {
   color: #aaa;
 }
 
+select {
+  color: var(--text);
+  background: var(--darker);
+  border: 1px solid var(--lighter);
+  padding: 2px 4px;
+}
+
+button:focus { outline: none; }
+
 header h1, .label {
-  color: #ccc;
+  color: var(--text);
   text-transform: uppercase;
   font-size: 11px;
   line-height: 12px;
@@ -46,6 +59,37 @@ header h1 {
   text-align-last: justify;
 }
 
+input, select { border-radius: 1px; }
+input:focus, select:focus, button:focus {
+  outline-offset: 1px;
+  outline: 2px solid #20c8a957;
+}
+button:focus {
+  outline-offset: 5px;
+}
+
+.param-group {
+  display: flex;
+}
+.param-group-label {
+  width: 100px;
+  margin: 5px 0;
+}
+.vertical-slider-with-label {
+  display: inline-block;
+}
+.vertical-slider {
+  width: var(--range-height);
+  height: var(--range-width);
+  display: inline-block;
+}
+.vertical-slider .range-container {
+  transform: rotate(270deg) translate(calc(var(--range-width)*-0.5), calc(var(--range-width)*-0.5));
+  transform-origin: top;
+}
+.vertical-slider-with-label .label {
+  margin: 5px 0;
+}
 .range-container .label {
   width: 150px;
   padding-top: var(--tick-height);
@@ -70,16 +114,30 @@ header h1 {
   background: #bbb;
 }
 
+.button-column {
+  display: flex;
+  margin: 10px;
+  width: 100px;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.button-container .label {
+  display: flex;
+  padding: 5px 0;
+}
+
+.button-container .label, .button-container button { cursor: pointer; }
+
 .button-lamp {
-  display: inline-block;
   height: 7px;
   width: 7px;
-  margin: 4px 5px 6px 0;
+  margin: 3px 5px 0 0;
   border-radius: 6px;
   background-color: #666;
   outline: 1px solid #0008;
-  vertical-align: middle;
   box-shadow: inset -1px -1px 4px #0008;
+  flex-shrink: 0;
 }
 
 .button-lamp.on {
@@ -88,25 +146,22 @@ header h1 {
 }
 
 .button-container {
-  display: inline-block;
   padding: 4px 0;
 }
 
 .button-container button {
   margin: 4px;
-  border: 1px solid #0004;
+  border: 1px solid #000b;
   /*border: 0;*/
   border-radius: 2.5px;
   box-sizing: border-box;
+  background-color: #aaa;
   /*background-color: #be4f42;*/
   /*background-color: #20c8a9;*/
-  background-color: #aaa;
-  box-shadow: 0 2px 0 1px #000a, 0 3px 0 1px #fff4, 0 0 0px 3px var(--bg), 0 0 0 4px #0006, inset 0 1px 0 0 #fff4;
+  box-shadow: 0 0 0 3px #0008, 0 1px 0 3px #fff4, 0 0 0 3px var(--bg), 0 0 0 4px #0006, inset 0 1px 0 0 #fff4;
   width: 76px;
   height: 12px;
 }
 .button-container button:active {
-  border: 1px solid #0008;
   background-color: #888;
-  box-shadow: 0 2px 0 1px var(--bg), 0 3px 0 1px #fff4, 0 0 0px 3px var(--bg), 0 0 0 4px #0006;
 }

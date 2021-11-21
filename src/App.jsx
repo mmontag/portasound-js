@@ -64,6 +64,7 @@ class App extends React.Component {
 
   render() {
     const { sysexParams, midiOutputs, midiOutputId } = this.state;
+    const params = sysexParams;
 
     return (
       <div className="App">
@@ -80,35 +81,51 @@ class App extends React.Component {
             ))}
           </select>
         </p>
-        <table id="editor">
-          <tbody>
-          {sysexParams.map((param, i) => {
-            const sysexValue = param.valueFn ? param.valueFn(param.value) : param.value;
-            const sysexBinary = (sysexValue | 0).toString(2).padStart(8, '0');
-            const displayValue = param.value.toString().padStart(2, '0');
+        <div className='param-group'>
+          <div className='param-group-label label'>Carrier</div>
+          {[params[6], params[4], params[2], params[22]].map(param => (
+            <div className='vertical-slider-with-label'>
+              <div className='label'>{param.shortName}</div>
+              <div key={'vert' + param.idx} className='vertical-slider'>
+                <PortasoundSlider {...param}
+                                  handleParamChange={this.handleParamChange}/>
+              </div>
+            </div>
+          ))}
+          <div className='button-column'>
+            <PortasoundButton {...params[16]} handleParamChange={this.handleParamChange} />
+            <PortasoundButton {...params[18]} handleParamChange={this.handleParamChange} />
+          </div>
+        </div>
+        {/*<table id="editor">*/}
+        {/*  <tbody>*/}
+        {/*  {sysexParams.map((param, i) => {*/}
+        {/*    const sysexValue = param.valueFn ? param.valueFn(param.value) : param.value;*/}
+        {/*    const sysexBinary = (sysexValue | 0).toString(2).padStart(8, '0');*/}
+        {/*    const displayValue = param.value.toString().padStart(2, '0');*/}
 
-            return (
-              <tr key={i} className='param'>
-                <td className='label'>[{i}] {param.name}:</td>
-                <td>
-                  {param.range === 2 ?
-                    <PortasoundButton {...param}
-                                      paramIdx={i}
-                                      handleParamChange={this.handleParamChange}/>
-                    :
-                    <PortasoundSlider {...param}
-                                      paramIdx={i}
-                                      handleParamChange={this.handleParamChange}/>
-                  }
-                </td>
-                <td className='label' title={sysexBinary}>
-                  {displayValue}
-                </td>
-              </tr>
-            )
-          })}
-          </tbody>
-        </table>
+        {/*    return (*/}
+        {/*      <tr key={i} className='param'>*/}
+        {/*        <td className='label'>[{i}] {param.name}:</td>*/}
+        {/*        <td>*/}
+        {/*          {param.range === 2 ?*/}
+        {/*            <PortasoundButton {...param}*/}
+        {/*                              paramIdx={i}*/}
+        {/*                              handleParamChange={this.handleParamChange}/>*/}
+        {/*            :*/}
+        {/*            <PortasoundSlider {...param}*/}
+        {/*                              paramIdx={i}*/}
+        {/*                              handleParamChange={this.handleParamChange}/>*/}
+        {/*          }*/}
+        {/*        </td>*/}
+        {/*        <td className='label' title={sysexBinary}>*/}
+        {/*          {displayValue}*/}
+        {/*        </td>*/}
+        {/*      </tr>*/}
+        {/*    )*/}
+        {/*  })}*/}
+        {/*  </tbody>*/}
+        {/*</table>*/}
       </div>
     )
   }
