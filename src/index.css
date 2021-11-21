@@ -69,26 +69,54 @@ button:focus {
 }
 
 .param-group {
-  display: flex;
+  display: inline-block;
+  margin: 10px auto;
 }
 .param-group-label {
-  width: 100px;
-  margin: 5px 0;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 10px 0;
+  display: flex;
+  flex-basis: 100%;
+  align-items: center;
+  margin: 8px -8px;
+}
+.param-group-label:before,
+.param-group-label:after {
+  content: "";
+  flex-grow: 1;
+  background: var(--text);
+  height: 1px;
+  font-size: 0px;
+  line-height: 0px;
+  margin: 0px 8px;
+}
+.param-subgroup {
+  margin-right: 30px;
+  display: inline-block;
+}
+.param-subgroup:last-child {
+  margin-right: 0;
 }
 .vertical-slider-with-label {
   display: inline-block;
+  vertical-align: middle;
+  width: 64px;
 }
 .vertical-slider {
   width: var(--range-height);
   height: var(--range-width);
-  display: inline-block;
 }
 .vertical-slider .range-container {
   transform: rotate(270deg) translate(calc(var(--range-width)*-0.5), calc(var(--range-width)*-0.5));
   transform-origin: top;
 }
 .vertical-slider-with-label .label {
-  margin: 5px 0;
+  padding: 5px 0;
+  height: 24px;
+  display: table-cell;
+  vertical-align: bottom;
 }
 .range-container .label {
   width: 150px;
@@ -115,7 +143,8 @@ button:focus {
 }
 
 .button-column {
-  display: flex;
+  display: inline-block;
+  vertical-align: middle;
   margin: 10px;
   width: 100px;
   flex-direction: column;
