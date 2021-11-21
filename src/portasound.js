@@ -127,7 +127,7 @@ const paramsPss480 = [
   },
   {
     name: 'Amplitude Modulation Enable (Modulator)',
-    shortName: 'Amp. Mod.',
+    shortName: 'Amp. Mod. Enable',
     range: 2,
     sysexByte: 9,
     sysexBit: 7,
@@ -151,7 +151,7 @@ const paramsPss480 = [
   },
   {
     name: 'Coarse Detune Enable (Carrier)',
-    shortName: 'Coarse Det.',
+    shortName: 'Coarse Det. Enable',
     range: 2,
     sysexByte: 10,
     sysexBit: 6,
@@ -267,7 +267,7 @@ const paramsPss480 = [
   },
   {
     name: 'Sustain Release Rate (Modulator)',
-    shortName: 'Sus. Release',
+    shortName: 'Sustain Release',
     range: 16,
     sysexByte: 20,
     sysexBit: 0,
@@ -275,7 +275,7 @@ const paramsPss480 = [
   },
   {
     name: 'Sustain Release Rate (Carrier)',
-    shortName: 'Sus. Release',
+    shortName: 'Sustain Release',
     range: 16,
     sysexByte: 21,
     sysexBit: 0,
