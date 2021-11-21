@@ -3,12 +3,12 @@ import React, { PureComponent } from 'react';
 class PortasoundButton extends PureComponent {
   handleButtonPress = (e) => {
     const value = (this.props.value === 0) ? 1 : 0;
-    this.props.handleParamChange(this.props.paramIdx, value);
+    this.props.handleParamChange(this.props.idx, value);
   }
 
   render() {
-    const { value, paramIdx, shortName } = this.props;
-    const id = 'input-' + paramIdx;
+    const { value, idx, shortName } = this.props;
+    const id = 'input-' + idx;
 
     return (
       <div className='button-container'>
@@ -19,7 +19,7 @@ class PortasoundButton extends PureComponent {
             <span className='button-lamp off'/>
           }
           {shortName}
-        </label><br/>
+        </label>
         <button id={id} onClick={this.handleButtonPress}/>
       </div>
     );

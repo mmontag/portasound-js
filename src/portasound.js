@@ -275,7 +275,7 @@ const paramsPss480 = [
     sysexBit: 6,
     value: 0,
   },
-];
+].map((p, i) => { p.idx = i; return p });
 
 function fineDetuneFn(val) {
   return ((val - 7 < 0) ? 0b1000 : 0) | Math.abs(val - 7);
