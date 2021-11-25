@@ -116,6 +116,7 @@ const paramsPss480 = [
     sysexByte: 7,
     sysexBit: 0,
     value: 63,
+    valueFn: invert64Fn,
   },
   {
     name: 'Attack Rate (Carrier)',
@@ -124,6 +125,7 @@ const paramsPss480 = [
     sysexByte: 8,
     sysexBit: 0,
     value: 63,
+    valueFn: invert64Fn,
   },
   {
     name: 'Amplitude Modulation Enable (Modulator)',
@@ -164,6 +166,7 @@ const paramsPss480 = [
     sysexByte: 9,
     sysexBit: 0,
     value: 31,
+    valueFn: invert64Fn,
   },
   {
     name: 'Decay 1 Rate (Carrier)',
@@ -172,6 +175,7 @@ const paramsPss480 = [
     sysexByte: 10,
     sysexBit: 0,
     value: 31,
+    valueFn: invert64Fn,
   },
   {
     name: 'Sine Table Form (Modulator)',
@@ -196,6 +200,7 @@ const paramsPss480 = [
     sysexByte: 11,
     sysexBit: 0,
     value: 4,
+    valueFn: invert64Fn,
   },
   {
     name: 'Decay 2 Rate (Carrier)',
@@ -204,6 +209,7 @@ const paramsPss480 = [
     sysexByte: 12,
     sysexBit: 0,
     value: 4,
+    valueFn: invert64Fn,
   },
 
   {
@@ -213,7 +219,7 @@ const paramsPss480 = [
     sysexByte: 13,
     sysexBit: 4,
     value: 12,
-    valueFn: decayLevelFn,
+    valueFn: invert16Fn,
   },
   {
     name: 'Decay 1 Level (Carrier)',
@@ -222,7 +228,7 @@ const paramsPss480 = [
     sysexByte: 14,
     sysexBit: 4,
     value: 12,
-    valueFn: decayLevelFn,
+    valueFn: invert16Fn,
   },
 
   {
@@ -232,6 +238,7 @@ const paramsPss480 = [
     sysexByte: 13,
     sysexBit: 0,
     value: 9,
+    valueFn: invert16Fn,
   },
   {
     name: 'Release Rate (Carrier)',
@@ -240,6 +247,7 @@ const paramsPss480 = [
     sysexByte: 14,
     sysexBit: 0,
     value: 9,
+    valueFn: invert16Fn,
   },
   {
     name: 'Feedback',
@@ -272,6 +280,7 @@ const paramsPss480 = [
     sysexByte: 20,
     sysexBit: 0,
     value: 5,
+    valueFn: invert16Fn,
   },
   {
     name: 'Sustain Release Rate (Carrier)',
@@ -280,6 +289,7 @@ const paramsPss480 = [
     sysexByte: 21,
     sysexBit: 0,
     value: 5,
+    valueFn: invert16Fn,
   },
   {
     name: 'Vibrato Delay Time',
@@ -315,8 +325,12 @@ function levelFn(val) {
   return 99 - val;
 }
 
-function decayLevelFn(val) {
+function invert16Fn(val) {
   return 15 - val;
+}
+
+function invert64Fn(val) {
+  return 63 - val;
 }
 
 function buildSysex(params) {

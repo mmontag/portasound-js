@@ -52,7 +52,7 @@ class App extends React.Component {
     const param = params[idx];
     const bankNum = parseInt(params[0].value);
 
-    param.value = value;
+    param.value = Math.min(Math.max(value, 0), param.range - 1);
     this.setState({ sysexParams: params });
 
     sendSysex(this.getMidiOutput(), bankNum, buildSysex(params));
