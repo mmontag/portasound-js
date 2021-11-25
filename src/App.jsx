@@ -82,9 +82,9 @@ class App extends React.Component {
           </select>
         </p>
         <div className='param-group'>
-          <div className='param-group-label label'>Carrier</div>
+          <h2 className='param-group-label label'>Carrier</h2>
           <div className='param-subgroup'>
-            <div className='label'>Oscillator</div>
+            <h3 className='label'>Oscillator</h3>
             {[params[6], params[4], params[2], params[22]].map(param => (
               <div className='vertical-slider-with-label'>
                 <div className='label'>{param.shortName}</div>
@@ -100,7 +100,7 @@ class App extends React.Component {
             </div>
           </div>
           <div className='param-subgroup'>
-            <div className='label'>Envelope</div>
+            <h3 className='label'>Envelope</h3>
             {[params[14], params[20], params[26], params[24], params[28], params[33]].map(param => (
               <div className='vertical-slider-with-label'>
                 <div className='label'>{param.shortName}</div>
@@ -112,7 +112,7 @@ class App extends React.Component {
             ))}
           </div>
           <div className='param-subgroup'>
-            <div className='label'>Key Scaling</div>
+            <h3 className='label'>Key Scaling</h3>
             {[params[10], params[9], params[12]].map(param => (
               <div className='vertical-slider-with-label'>
                 <div className='label'>{param.shortName}</div>
@@ -125,9 +125,9 @@ class App extends React.Component {
           </div>
         </div>
         <div className='param-group'>
-          <div className='param-group-label label'>Modulator</div>
+          <h2 className='param-group-label label'>Modulator</h2>
           <div className='param-subgroup'>
-            <div className='label'>Oscillator</div>
+            <h3 className='label'>Oscillator</h3>
             {[params[5], params[3], params[1], params[21]].map(param => (
               <div className='vertical-slider-with-label'>
                 <div className='label'>{param.shortName}</div>
@@ -143,7 +143,7 @@ class App extends React.Component {
             </div>
           </div>
           <div className='param-subgroup'>
-            <div className='label'>Envelope</div>
+            <h3 className='label'>Envelope</h3>
             {[params[13], params[19], params[25], params[23], params[27], params[32]].map(param => (
               <div className='vertical-slider-with-label'>
                 <div className='label'>{param.shortName}</div>
@@ -155,7 +155,7 @@ class App extends React.Component {
             ))}
           </div>
           <div className='param-subgroup'>
-            <div className='label'>Key Scaling</div>
+            <h3 className='label'>Key Scaling</h3>
             {[params[8], params[7], params[11]].map(param => (
               <div className='vertical-slider-with-label'>
                 <div className='label'>{param.shortName}</div>
@@ -168,8 +168,9 @@ class App extends React.Component {
           </div>
         </div>
         <div className='param-group'>
-          <div className='param-group-label label'>Global</div>
+          <h2 className='param-group-label label'>Global</h2>
           <div className='param-subgroup'>
+            <h3 className='label'>&nbsp;</h3>
             {[params[0], params[29]].map(param => (
               <div className='vertical-slider-with-label'>
                 <div className='label'>{param.shortName}</div>
