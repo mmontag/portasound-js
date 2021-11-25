@@ -259,7 +259,7 @@ const paramsPss480 = [
   },
   {
     name: 'Pitch Modulation Sensitivity (Vibrato)',
-    shortName: 'Pitch Mod. Sens',
+    shortName: 'Pitch Depth',
     range: 8,
     sysexByte: 16,
     sysexBit: 4,
@@ -267,7 +267,7 @@ const paramsPss480 = [
   },
   {
     name: 'Amplitude Modulation Sensitivity (Tremolo)',
-    shortName: 'Level Mod. Sens',
+    shortName: 'Level Depth',
     range: 4,
     sysexByte: 16,
     sysexBit: 0,
@@ -293,7 +293,7 @@ const paramsPss480 = [
   },
   {
     name: 'Vibrato Delay Time',
-    shortName: 'Vib. Delay',
+    shortName: 'Delay',
     range: 128,
     sysexByte: 22,
     sysexBit: 0,

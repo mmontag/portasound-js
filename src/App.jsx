@@ -82,6 +82,37 @@ class App extends React.Component {
           </select>
         </p>
         <div className='param-group'>
+          <h2 className='param-group-label label'>Global</h2>
+          <div className='param-subgroup'>
+            <h3 className='label'>&nbsp;</h3>
+            {[params[0], params[29]].map(param => (
+              <div className='vertical-slider-with-label'>
+                <div className='label'>{param.shortName}</div>
+                <div key={'vert' + param.idx} className='vertical-slider'>
+                  <PortasoundSlider {...param}
+                                    handleParamChange={this.handleParamChange}/>
+                </div>
+              </div>
+            ))}
+            <div className='button-column'>
+              <PortasoundButton {...params[35]} handleParamChange={this.handleParamChange}/>
+              <PortasoundButton {...params[36]} handleParamChange={this.handleParamChange}/>
+            </div>
+          </div>
+          <div className='param-subgroup'>
+            <h3 className='label'>Low Freq Oscillator</h3>
+            {[params[30], params[31], params[34]].map(param => (
+              <div className='vertical-slider-with-label'>
+                <div className='label'>{param.shortName}</div>
+                <div key={'vert' + param.idx} className='vertical-slider'>
+                  <PortasoundSlider {...param}
+                                    handleParamChange={this.handleParamChange}/>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className='param-group'>
           <h2 className='param-group-label label'>Carrier</h2>
           <div className='param-subgroup'>
             <h3 className='label'>Oscillator</h3>
@@ -157,36 +188,6 @@ class App extends React.Component {
           <div className='param-subgroup'>
             <h3 className='label'>Key Scaling</h3>
             {[params[8], params[7], params[11]].map(param => (
-              <div className='vertical-slider-with-label'>
-                <div className='label'>{param.shortName}</div>
-                <div key={'vert' + param.idx} className='vertical-slider'>
-                  <PortasoundSlider {...param}
-                                    handleParamChange={this.handleParamChange}/>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className='param-group'>
-          <h2 className='param-group-label label'>Global</h2>
-          <div className='param-subgroup'>
-            <h3 className='label'>&nbsp;</h3>
-            {[params[0], params[29]].map(param => (
-              <div className='vertical-slider-with-label'>
-                <div className='label'>{param.shortName}</div>
-                <div key={'vert' + param.idx} className='vertical-slider'>
-                  <PortasoundSlider {...param}
-                                    handleParamChange={this.handleParamChange}/>
-                </div>
-              </div>
-            ))}
-            <div className='button-column'>
-              <PortasoundButton {...params[35]} handleParamChange={this.handleParamChange}/>
-              <PortasoundButton {...params[36]} handleParamChange={this.handleParamChange}/>
-            </div>
-          </div>
-          <div className='param-subgroup'>
-            {[params[30], params[31], params[34]].map(param => (
               <div className='vertical-slider-with-label'>
                 <div className='label'>{param.shortName}</div>
                 <div key={'vert' + param.idx} className='vertical-slider'>
