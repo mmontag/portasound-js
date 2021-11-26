@@ -198,3 +198,9 @@ h3.label {
 .button-container button:active {
   background-color: #888;
 }
+button.yellow {
+  background-color: #dac20c;
+}
+button.yellow:active {
+  background-color: #9b8a0a;
+}

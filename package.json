@@ -8,6 +8,8 @@
   },
   "dependencies": {
     "lodash-es": "^4.17.21",
+    "midifile": "^2.0.0",
+    "midiplayer": "^1.0.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0"
   },

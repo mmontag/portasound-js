@@ -3,6 +3,8 @@ import './App.css';
 import { buildSysex, paramsPss480, sendSysex } from './portasound';
 import PortasoundSlider from './PortasoundSlider';
 import PortasoundButton from './PortasoundButton';
+import MIDIPlayer from 'midiplayer';
+import MIDIFile from 'midifile';
 
 const MIDI_OUTPUT_ID_KEY = "midiOutputId";
 
@@ -11,6 +13,7 @@ class App extends React.Component {
     super(props);
 
     this.midiAccess = null; // WebMIDI object for internal access to MIDI devices
+    this.midiPlayer = new MIDIPlayer(); // Init with null player
     this.state = {
       midiOutputs: [], // For UI/display only; midiAccess.outputs converted to array
       midiOutputId: 0, // For UI/display only, also used in localstorage
@@ -22,8 +25,14 @@ class App extends React.Component {
     navigator.requestMIDIAccess({ sysex: true }).then(this.onMIDISuccess);
   }
 
+  updateMidiOutput = (midiOutputId) => {
+    this.setState({ midiOutputId: midiOutputId });
+    this.midiPlayer.stop();
+    this.midiPlayer = new MIDIPlayer({ output: this.getMidiOutput() });
+  }
+
   handleMidiOutputChange = (e) => {
-    this.setState({ midiOutputId: e.target.value });
+    this.updateMidiOutput(e.target.value);
     localStorage.setItem(MIDI_OUTPUT_ID_KEY, e.target.value);
   }
 
@@ -43,9 +52,33 @@ class App extends React.Component {
 
     const storedMidiOutputId = localStorage.getItem(MIDI_OUTPUT_ID_KEY);
     if (storedMidiOutputId) {
-      this.setState({ midiOutputId: storedMidiOutputId });
+      this.updateMidiOutput(storedMidiOutputId);
     }
   }
+
+  toggleDemo = () => {
+    if (this.demoPlaying) {
+      this.midiStop();
+    } else {
+      this.midiPlay('/midi/polkadot.mid');
+    }
+    this.demoPlaying = !this.demoPlaying;
+  }
+
+  midiPlay = (filename) => {
+    fetch(filename, { responseType: 'arraybuffer' })
+      .then(response => response.arrayBuffer())
+      .then(data => {
+        console.log("Loaded %d bytes.", data.byteLength);
+        const midiFile = new MIDIFile(data);
+        this.midiPlayer.load(midiFile);
+        this.midiPlayer.play(function() { console.log("MIDI file playback ended."); });
+      });
+  }
+
+  midiStop = () => {
+    this.midiPlayer.stop();
+  };
 
   handleParamChange = (idx, value) => {
     const params = this.state.sysexParams;
@@ -110,6 +143,16 @@ class App extends React.Component {
                 </div>
               </div>
             ))}
+          </div>
+          <div className='param-subgroup'>
+            <div className='button-column'>
+              <div className='button-container'>
+                <label htmlFor='demo' className='label'>
+                  Demonstration Start/Stop
+                </label>
+                <button id='demo' className='yellow' onClick={this.toggleDemo}/>
+              </div>
+            </div>
           </div>
         </div>
         <div className='param-group'>
