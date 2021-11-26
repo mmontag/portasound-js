@@ -7,6 +7,7 @@ import MIDIPlayer from 'midiplayer';
 import MIDIFile from 'midifile';
 
 const MIDI_OUTPUT_ID_KEY = "midiOutputId";
+const LAYOUTS = ['Yamaha PSS-480/PSS-580/PSS-680/PSS-780', 'Yamaha DSR-2000'];
 
 class App extends React.Component {
   constructor(props) {
@@ -96,7 +97,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { sysexParams, midiOutputs, midiOutputId } = this.state;
+    const { sysexParams, midiOutputs, midiOutputId, layout } = this.state;
     const params = sysexParams;
 
     return (
@@ -113,6 +114,14 @@ class App extends React.Component {
           <select id="midiOutput" value={midiOutputId} onChange={this.handleMidiOutputChange}>
             {midiOutputs.map(output => (
               <option key={output.id} value={output.id}>{output.name}</option>
+            ))}
+          </select>
+        </p>
+        <p>
+          Parameter Layout:{' '}
+          <select id="layout" value={layout} onChange={this.handleLayoutChange}>
+            {layouts.map((layout, idx) => (
+              <option key={idx} value={idx}>{layout}</option>
             ))}
           </select>
         </p>
