@@ -102,8 +102,10 @@ class App extends React.Component {
     return (
       <div className="App">
         <header>
-          <img src="/images/portasound-cyan.png" alt="Portasound"/>
-          <img src="/images/pss-480-yellow.png" alt="PSS-480"/>
+          <div>
+            <img src="/images/portasound-cyan.png" alt="Portasound"/>
+            <img src="/images/js.png" alt="JS"/>
+          </div>
           <h1>Sysex Editor for Portasound Series Keyboards</h1>
         </header>
         <p>

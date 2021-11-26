@@ -51,13 +51,8 @@ header h1, .label {
   user-select: none;
   font-weight: normal;
 }
-header {
-  display: flex;
-  flex-direction: column;
-  width: 324px;
-}
-header h1 {
-  text-align-last: justify;
+header img {
+  height: 60px;
 }
 
 input, select { border-radius: 1px; }
