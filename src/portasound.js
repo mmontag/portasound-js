@@ -33,7 +33,7 @@ const paramsPss480 = [
     range: 16,
     sysexByte: 1,
     sysexBit: 0,
-    value: 8,
+    value: 3,
   },
   {
     name: 'Multiplier (Carrier)',
@@ -41,7 +41,7 @@ const paramsPss480 = [
     range: 16,
     sysexByte: 2,
     sysexBit: 0,
-    value: 2,
+    value: 1,
   },
   {
     name: 'Total Level (Modulator)',
@@ -115,7 +115,7 @@ const paramsPss480 = [
     range: 64,
     sysexByte: 7,
     sysexBit: 0,
-    value: 63,
+    value: 5,
     valueFn: invert64Fn,
   },
   {
@@ -124,7 +124,7 @@ const paramsPss480 = [
     range: 64,
     sysexByte: 8,
     sysexBit: 0,
-    value: 63,
+    value: 5,
     valueFn: invert64Fn,
   },
   {
@@ -165,7 +165,7 @@ const paramsPss480 = [
     range: 64,
     sysexByte: 9,
     sysexBit: 0,
-    value: 31,
+    value: 40,
     valueFn: invert64Fn,
   },
   {
@@ -174,7 +174,7 @@ const paramsPss480 = [
     range: 64,
     sysexByte: 10,
     sysexBit: 0,
-    value: 31,
+    value: 48,
     valueFn: invert64Fn,
   },
   {
@@ -199,7 +199,7 @@ const paramsPss480 = [
     range: 64,
     sysexByte: 11,
     sysexBit: 0,
-    value: 4,
+    value: 59,
     valueFn: invert64Fn,
   },
   {
@@ -208,7 +208,7 @@ const paramsPss480 = [
     range: 64,
     sysexByte: 12,
     sysexBit: 0,
-    value: 4,
+    value: 59,
     valueFn: invert64Fn,
   },
 
@@ -218,7 +218,7 @@ const paramsPss480 = [
     range: 16,
     sysexByte: 13,
     sysexBit: 4,
-    value: 12,
+    value: 3,
     valueFn: invert16Fn,
   },
   {
@@ -227,7 +227,7 @@ const paramsPss480 = [
     range: 16,
     sysexByte: 14,
     sysexBit: 4,
-    value: 12,
+    value: 3,
     valueFn: invert16Fn,
   },
 
@@ -237,7 +237,7 @@ const paramsPss480 = [
     range: 16,
     sysexByte: 13,
     sysexBit: 0,
-    value: 9,
+    value: 5,
     valueFn: invert16Fn,
   },
   {
@@ -246,7 +246,7 @@ const paramsPss480 = [
     range: 16,
     sysexByte: 14,
     sysexBit: 0,
-    value: 9,
+    value: 5,
     valueFn: invert16Fn,
   },
   {
@@ -279,7 +279,7 @@ const paramsPss480 = [
     range: 16,
     sysexByte: 20,
     sysexBit: 0,
-    value: 5,
+    value: 9,
     valueFn: invert16Fn,
   },
   {
@@ -288,7 +288,7 @@ const paramsPss480 = [
     range: 16,
     sysexByte: 21,
     sysexBit: 0,
-    value: 5,
+    value: 9,
     valueFn: invert16Fn,
   },
   {
