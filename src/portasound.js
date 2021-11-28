@@ -317,9 +317,35 @@ const paramsPss480 = [
   },
 ].map((p, i) => { p.idx = i; return p });
 
-const paramsDsr2000 = [
-  {},
-];
+const paramsDsr2000 =[];
+const dsrNibbles = [
+  0, 1, 7, 0, 7, 1, 5, 3, 0, 1, 1, 9, 2, 0, 1, 8, 0, 4, 1, 15, 9, 11, 1, 15, 5, 15, 0,
+  15, 0, 0, 1, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2, 0, 1, 0, 3, 0, 3, 1, 0, 3, 4, 0,
+  0, 10, 0, 0, 4, 0, 5, 0, 4, 0, 4, 8, 1, 8, 3, 8, 1, 8, 1, 0, 15, 1, 14, 12, 12, 0, 0,
+  0, 0, 0, 0, 0, 2, 2, 12, 0, 0, 2, 12, 0, 0, 2, 12, 5, 11, 1, 4, 0, 12, 1, 7, 7, 4, 2,
+  1, 5, 2, 0, 1, 0, 0, 0, 0, 0, 1, 0, 7, 0, 4, 0, 4, 0, 4, 12, 9, 4, 5, 0, 4, 0, 4, 3,
+  7, 1, 7, 7, 7, 4, 6, 0, 5, 4, 0, 7, 7, 0, 2, 0, 12, 0, 1, 15, 4, 0, 7, 0, 0];
+
+
+let nibs;
+// 02
+nibs = hexToBytes('01080409000100030001010c020b03020004090f010b050f090f000f0009000908090009000000040006040f0f0203020107000601000200030000070000000200030e00090008000800000f010e0c08000000000000000200000000000000000000030d04060004010a0300020100000603000000000000000502070005000507070406000502070005000508090006060903000202060e 0002 00 00 0000 0007 0000');
+
+// 01
+// nibs = hexToBytes('030b0700040003010200010f0108020600000501000f040f0501000f0006000c080600000000000900000605020202020f08000600020201020000040003000400040901080008000b00000f010e0c08000002070001000200000000000000000000030800070000000f0207030205020500000002040003000500050005000508070e07000507070e0704070a0704060005030002010b04 0002 00 01 0000 0007 0000');
+for (let i = 0; i < 162; i++) {
+  paramsDsr2000.push({
+    idx: i,
+    name: 'Param ' + i,
+    shortName: ((i%2)?'':((i/2)|0)),
+    range: 16,
+    sysexByte: (i/2)|0,
+    sysexBit: ((i+1)%2) * 4,
+    value: nibs[i],
+  });
+}
+
+
 
 function fineDetuneFn(val) {
   return ((val - 7 < 0) ? 0b1000 : 0) | Math.abs(val - 7);
@@ -337,7 +363,68 @@ function invert64Fn(val) {
   return 63 - val;
 }
 
-function buildSysex(params) {
+function hexToBytes(text) {
+  const bytes = [];
+  let hex = text.toLowerCase().replace(/[^abcdef0123456789]/gi, '');
+  if (hex.length % 2 !== 0) throw new Error('Hex char length must be multiple of 2.');
+  for (let i = 0; i < hex.length; i += 2) {
+    bytes.push(parseInt(hex.substr(i, 2), 16));
+  }
+  return bytes;
+}
+
+
+function buildSysexDsr2000(params) {
+  const header = [
+    // Yamaha DSR-2000 voice bulk dump sysex header
+    0xF0, 0x43, 0x73, 0x0d, 0x06, 0x50, 0x00, 0x00
+  ];
+  const length = [ 0x0a, 0x05 ];
+
+  const data = [];
+  for (let i = 0; i < params.length; i++) {
+    const param = params[i];
+    const value = param.valueFn ? param.valueFn(param.value) : param.value;
+    data[param.sysexByte] |= (value << param.sysexBit);
+  }
+  console.log('data:', bytesToHex(data));
+
+  const voiceNum = 0x01;
+  const splitData = data.map(splitByte).flat();
+  const innerChecksum = splitByte(checksum(data));
+  const outerChecksum = yamahaChecksum([voiceNum, ...splitData, ...innerChecksum]);
+  const bytes = [...header, ...length, voiceNum, ...splitData, ...innerChecksum, outerChecksum, 0xf7];
+  console.log('Composed DSR-2000 message:', bytesToHex(bytes));
+  return bytes;
+}
+
+function splitByte(byte) {
+  if (byte < 0) byte += 256;
+  return [(byte >> 4) & 0x0f, byte & 0x0f];
+}
+
+function yamahaChecksum(bytes) {
+  // http://www.muzines.co.uk/articles/everything-you-ever-wanted-to-know-about-system-exclusive/5722
+  // checksum = ((NOT(sum AND 255)) AND 127)+1
+  let checksum = 0;
+  for (let i = 0; i < bytes.length; i++) {
+    checksum += bytes[i] || 0;
+  }
+  checksum = (~(checksum & 0xFF) + 1) & 0x7F;
+  return checksum;
+}
+
+function checksum(bytes) {
+  let checksum = 0;
+  for (let i = 0; i < bytes.length; i++) {
+    checksum += bytes[i] || 0;
+  }
+  // checksum = (~(checksum & 0xFF) + 1) & 0x7F;
+  checksum = ~(checksum & 0xFF);
+  return checksum;
+}
+
+function buildSysexPss480(params) {
   const bytes = [
     // Yamaha sysex header
     0xF0, 0x43, 0x76, 0x00,
@@ -386,6 +473,16 @@ function buildSysex(params) {
   return bytes;
 }
 
+function bytesToHex(bytes) {
+  if (!Array.isArray(bytes)) bytes = [bytes];
+  for (var hex = [], i = 0; i < bytes.length; i++) {
+    var current = bytes[i] < 0 ? bytes[i] + 256 : bytes[i];
+    hex.push((current >>> 4).toString(16));
+    hex.push((current & 0xF).toString(16));
+  }
+  return hex.join('');
+}
+
 function bytesToString(data) {
   return ('[' + data.map(n => ('0' + n.toString(16)).slice(-2)).join(' ') + ']').toUpperCase();
 }
@@ -394,13 +491,15 @@ function sendSysex(midiOutput, bankNum, bytes) {
   console.log('Sending...', bytesToString(bytes));
   midiOutput.send(bytes);
   // Change patch to the bank
-  midiOutput.send([0xC0, 0x64 + bankNum]);
+  midiOutput.send([0xC0, 0x00 + bankNum]);
 }
 
 sendSysex = debounce(sendSysex, 500, { leading: false, trailing: true });
 
 export {
   sendSysex,
-  buildSysex,
+  buildSysexPss480,
+  buildSysexDsr2000,
   paramsPss480,
+  paramsDsr2000,
 };
