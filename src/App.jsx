@@ -1,21 +1,25 @@
 import React from 'react';
 import './App.css';
-import { buildSysex, paramsDsr2000, paramsPss480, sendSysex } from './portasound';
+import { buildSysexDsr2000, buildSysexPss480, paramsDsr2000, paramsPss480, sendSysex } from './portasound';
 import MIDIPlayer from 'midiplayer';
 import MIDIFile from 'midifile';
 import { PSS480 } from './PSS480';
+import { DSR2000 } from './DSR2000';
 
 const MIDI_OUTPUT_ID_KEY = "midiOutputId";
+const LAYOUT_KEY = "parameterLayout";
 const LAYOUTS = [
   {
     name: 'Yamaha PSS-480/580/680/780',
     params: paramsPss480,
     componentClass: PSS480,
+    buildSysex: buildSysexPss480,
   },
   {
     name: 'Yamaha DSR-2000',
     params: paramsDsr2000,
-    componentClass: PSS480,
+    componentClass: DSR2000,
+    buildSysex: buildSysexDsr2000,
   },
 ];
 
@@ -35,10 +39,23 @@ class App extends React.Component {
 
   componentDidMount() {
     navigator.requestMIDIAccess({ sysex: true }).then(this.onMIDISuccess);
+
+    const storedLayoutId = localStorage.getItem(LAYOUT_KEY);
+    if (storedLayoutId != null) {
+      this.updateLayout(storedLayoutId);
+    }
   }
 
   handleLayoutChange = (e) => {
-    this.setState({ layout: e.target.value });
+    this.updateLayout(parseInt(e.target.value));
+  }
+
+  updateLayout = (layout) => {
+    this.setState({
+      layout: layout,
+      sysexParams: LAYOUTS[layout].params
+    });
+    localStorage.setItem(LAYOUT_KEY, layout);
   }
 
   updateMidiOutput = (midiOutputId) => {
@@ -67,7 +84,7 @@ class App extends React.Component {
     this.setState({ midiOutputs: outputs });
 
     const storedMidiOutputId = localStorage.getItem(MIDI_OUTPUT_ID_KEY);
-    if (storedMidiOutputId) {
+    if (storedMidiOutputId != null) {
       this.updateMidiOutput(storedMidiOutputId);
     }
   }
@@ -100,6 +117,7 @@ class App extends React.Component {
     const params = this.state.sysexParams;
     const param = params[idx];
     const bankNum = parseInt(params[0].value);
+    const buildSysex = LAYOUTS[this.state.layout].buildSysex;
 
     param.value = Math.min(Math.max(value, 0), param.range - 1);
     this.setState({ sysexParams: params });
