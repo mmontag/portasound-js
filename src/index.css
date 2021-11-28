@@ -114,8 +114,9 @@ h3.label {
 .vertical-slider-with-label .label {
   padding: 5px 0;
   height: 24px;
-  display: table-cell;
-  vertical-align: bottom;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
 }
 .range-container .label {
   width: 150px;

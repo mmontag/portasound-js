@@ -24,7 +24,7 @@ class PortasoundSlider extends PureComponent {
   }
 
   render() {
-    const { value, range, idx, handleParamChange } = this.props;
+    const { value, range, shortName, idx, handleParamChange, label } = this.props;
     let ticks;
     if (range === 100) ticks = 11;
     else if (range === 128) ticks = 9;
@@ -32,12 +32,17 @@ class PortasoundSlider extends PureComponent {
     else ticks = range;
 
     return (
-      <div className='range-container'>
-        <input type='range' min='0' max={range - 1}
-               value={value}
-               ref={this.inputRef}
-               onChange={(e) => handleParamChange(idx, e.target.value)}/>
-        <div className='ticks'>{[...Array(ticks)].map((_, i) => <span key={i} className='tick'/>)}</div>
+      <div key={'vert' + idx} className='vertical-slider-with-label'>
+        <div className='label'>{ label || shortName}</div>
+        <div className='vertical-slider'>
+          <div className='range-container'>
+            <input type='range' min='0' max={range - 1}
+                   value={value}
+                   ref={this.inputRef}
+                   onChange={(e) => handleParamChange(idx, e.target.value)}/>
+            <div className='ticks'>{[...Array(ticks)].map((_, i) => <span key={i} className='tick'/>)}</div>
+          </div>
+        </div>
       </div>
     );
   }
