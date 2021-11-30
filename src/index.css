@@ -34,7 +34,7 @@ img {
   color: #aaa;
 }
 
-select {
+select, input[type=text] {
   color: var(--text);
   background: var(--darker);
   border: 1px solid var(--lighter);

@@ -48,9 +48,9 @@ const voicesBytes = voices.map(rawHex => hexToBytes(rawHex));
 voicesBytes.forEach(bytes => {
   // start byte index for voice number is 5.
   const len = bytes.length;
-  const [m1, m2, checksum] = [bytes[len - 3], bytes[len - 2], bytes[len - 1]].map(bytesToHex);
+  const [m1, m2, outerChecksum] = [bytes[len - 3], bytes[len - 2], bytes[len - 1]].map(bytesToHex);
   const joined = joinBytePairs(bytes.slice(6, len - 3));
-  const joinedChecksum = bytesToHex(yamahaChecksum(joined));
+  const joinedChecksum = bytesToHex(checksum(joined));
   console.log(`Special checksum: ${joinedChecksum}   Mystery Bytes: ${m1} ${m2}\n`);
   // for (let i = 5)
 });
@@ -86,7 +86,7 @@ function bytesToHex(bytes) {
   return hex.join('');
 }
 
-function yamahaChecksum(bytes) {
+function checksum(bytes) {
   // http://www.muzines.co.uk/articles/everything-you-ever-wanted-to-know-about-system-exclusive/5722
   // checksum = ((NOT(sum AND 255)) AND 127)+1
   let checksum = 0;
