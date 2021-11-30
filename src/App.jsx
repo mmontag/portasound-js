@@ -5,6 +5,7 @@ import MIDIPlayer from 'midiplayer';
 import MIDIFile from 'midifile';
 import { PSS480 } from './PSS480';
 import { DSR2000 } from './DSR2000';
+import { TestBench } from './TestBench';
 
 const MIDI_OUTPUT_ID_KEY = "midiOutputId";
 const LAYOUT_KEY = "parameterLayout";
@@ -19,6 +20,12 @@ const LAYOUTS = [
     name: 'Yamaha DSR-2000',
     params: paramsDsr2000,
     componentClass: DSR2000,
+    buildSysex: buildSysexDsr2000,
+  },
+  {
+    name: 'DSR-2000 Test Bench',
+    params: paramsDsr2000,
+    componentClass: TestBench,
     buildSysex: buildSysexDsr2000,
   },
 ];
