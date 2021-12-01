@@ -6,13 +6,12 @@ export function TestBench(p) {
   for (let i = 0; i < p.params.length; i++) {
     sliders.push(
       <>
-        <PortasoundSlider {...p.params[i]} handleParamChange={p.handleParamChange} label={
+        <PortasoundSlider {...p.params[i]} value={p.values[i]} handleParamChange={p.handleParamChange} label={
           <>
             <b>{p.params[i].shortName}</b>
             <span>{p.params[i].value.toString(2).padStart(4, '0')} <span style={{opacity: 0.5}}>{p.params[i].value}</span></span>
           </>
-        }>
-        </PortasoundSlider>
+        }/>
       </>
     );
   }
