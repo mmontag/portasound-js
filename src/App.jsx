@@ -57,9 +57,6 @@ class App extends React.Component {
       layoutId: 0,
       presetId: 0,
     };
-
-    this.updateLayout(0);
-    this.updatePreset(0); // Initializes empty preset.
   }
 
   componentDidMount() {
@@ -68,6 +65,8 @@ class App extends React.Component {
     const storedLayoutId = localStorage.getItem(LAYOUT_KEY);
     if (storedLayoutId != null) {
       this.updateLayout(parseInt(storedLayoutId));
+    } else {
+      this.updateLayout(0);
     }
     const storedPresetId = localStorage.getItem(PRESET_KEY);
     if (storedPresetId != null) {
@@ -76,7 +75,7 @@ class App extends React.Component {
   }
 
   loadPresets = (layoutId) => {
-    let dirty = false;
+    // let dirty = false;
     const layout = LAYOUTS[layoutId];
     const presets = layout.presets;
     for (let i = 0; i < presets.length; i++) {
@@ -87,11 +86,11 @@ class App extends React.Component {
           console.log('Preset param length not equal to param definition length. Skipping preset load.');
         } else {
           presets[i] = preset;
-          dirty = true;
+          // dirty = true;
         }
       }
     }
-    if (dirty) this.forceUpdate();
+    // if (dirty) this.forceUpdate();
   }
 
   handleSavePreset = (e) => {
@@ -102,7 +101,7 @@ class App extends React.Component {
 
   handlePresetChange = (e) => {
     const presetId = parseInt(e.target.value);
-    this.updatePreset(presetId);
+    this.updatePreset(this.state.layoutId, presetId);
   }
 
   handlePresetNameChange = (e) => {
@@ -113,23 +112,15 @@ class App extends React.Component {
     this.forceUpdate();
   }
 
-  updatePreset = (presetId) => {
+  updatePreset = (layoutId, presetId) => {
     // updates the preset (in memory/React state)
-    const { layoutId, sysexParams } = this.state;
     const params = LAYOUTS[layoutId].params;
-    if (BANKS[layoutId][presetId].values.length === 0) {
+    if (LAYOUTS[layoutId].presets[presetId].values.length !== params.length) {
       // if preset is empty, copy default param values into bank preset.
-      for (let i = 0; i < params.length; i++) {
-        BANKS[layoutId][presetId].values[i] = params[i].value;
-      }
+      LAYOUTS[layoutId].presets[presetId].values = params.map(p => p.value);
     }
-    // copy param values from bank preset into sysexParams
-    // for (let i = 0; i < params.length; i++) {
-    //   sysexParams[i].value = BANKS[layoutId][presetId].values[i];
-    // }
     this.setState({
       presetId: presetId,
-      // sysexParams: sysexParams,
     });
   }
 
@@ -141,9 +132,9 @@ class App extends React.Component {
 
   updateLayout = (layoutId) => {
     this.loadPresets(layoutId);
+    this.updatePreset(layoutId, 0);
     this.setState({
       layoutId: layoutId,
-      // sysexParams: LAYOUTS[layoutId].params
     });
   }
 
@@ -267,9 +258,13 @@ class App extends React.Component {
             ))}
           </select>
           <input type="text" onChange={this.handlePresetNameChange} value={presets[presetId].name}/>
-          <button onClick={this.handleSavePreset}>Save</button>
+          <button className="box-button" onClick={this.handleSavePreset}>Save</button>
         </p>
-        <LayoutComponent params={params} values={values} handleParamChange={this.handleParamChange} toggleDemo={this.toggleDemo}/>
+        {
+          values.length === params.length &&
+          <LayoutComponent params={params} values={values} handleParamChange={this.handleParamChange}
+                           toggleDemo={this.toggleDemo}/>
+        }
       </div>
     )
   }
