@@ -487,19 +487,30 @@ function bytesToString(data) {
   return ('[' + data.map(n => ('0' + n.toString(16)).slice(-2)).join(' ') + ']').toUpperCase();
 }
 
-function sendSysex(midiOutput, bankNum, bytes) {
+function sendSysexPss480(midiOutput, params) {
+  // TODO: move bank num out of preset/params
+  const bankNum = parseInt(params[0].value);
+  const bytes = buildSysexPss480(params);
   console.log('Sending...', bytesToString(bytes));
   midiOutput.send(bytes);
-  // Change patch to the bank
-  midiOutput.send([0xC0, 0x00 + bankNum]);
+  // Program Change to force refresh (0 to 4)
+  midiOutput.send([0xC0, bankNum]);
 }
+sendSysexPss480 = debounce(sendSysexPss480, 500, { leading: false, trailing: true });
 
-sendSysex = debounce(sendSysex, 500, { leading: false, trailing: true });
+function sendSysexDsr2000(midiOutput, params) {
+  const bytes = buildSysexDsr2000(params);
+  console.log('Sending...', bytesToString(bytes));
+  midiOutput.send(bytes);
+
+  // TODO: fix hardcoded dsr 2000 voice number
+  midiOutput.send([0xC0, 0x01]);
+}
+sendSysexDsr2000 = debounce(sendSysexDsr2000, 500, { leading: false, trailing: true });
 
 export {
-  sendSysex,
-  buildSysexPss480,
-  buildSysexDsr2000,
+  sendSysexPss480,
+  sendSysexDsr2000,
   paramsPss480,
   paramsDsr2000,
 };

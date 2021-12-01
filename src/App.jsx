@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { buildSysexDsr2000, buildSysexPss480, paramsDsr2000, paramsPss480, sendSysex } from './portasound';
+import { sendSysexDsr2000, sendSysexPss480, paramsDsr2000, paramsPss480 } from './portasound';
 import MIDIPlayer from 'midiplayer';
 import MIDIFile from 'midifile';
 import { PSS480 } from './PSS480';
@@ -17,6 +17,7 @@ for (let i = 0; i < 3; i++) {
       name: `Preset ${j}`,
       values: [],
       isDirty: false,
+      // TODO: originalValues restore point
     };
   }
 }
@@ -26,21 +27,21 @@ const LAYOUTS = [
     name: 'Yamaha PSS-480/580/680/780',
     params: paramsPss480,
     componentClass: PSS480,
-    buildSysex: buildSysexPss480,
+    sendSysex: sendSysexPss480,
     presets: BANKS[0],
   },
   {
     name: 'Yamaha DSR-2000',
     params: paramsDsr2000,
     componentClass: DSR2000,
-    buildSysex: buildSysexDsr2000,
+    sendSysex: sendSysexDsr2000,
     presets: BANKS[1],
   },
   {
     name: 'DSR-2000 Test Bench',
     params: paramsDsr2000,
     componentClass: TestBench,
-    buildSysex: buildSysexDsr2000,
+    sendSysex: sendSysexDsr2000,
     presets: BANKS[2],
   },
 ];
@@ -172,8 +173,10 @@ class App extends React.Component {
     this.setState({ midiOutputs: outputs });
 
     const storedMidiOutputId = localStorage.getItem(MIDI_OUTPUT_ID_KEY);
-    if (storedMidiOutputId != null) {
+    if (storedMidiOutputId != null && midiAccess.outputs.get(storedMidiOutputId)) {
       this.updateMidiOutput(storedMidiOutputId);
+    } else if (outputs.length > 0) {
+      this.updateMidiOutput(outputs[0].id);
     }
   }
 
@@ -204,10 +207,9 @@ class App extends React.Component {
   handleParamChange = (idx, value) => {
     const { layoutId, presetId } = this.state;
     const preset = LAYOUTS[layoutId].presets[presetId];
-    const buildSysex = LAYOUTS[layoutId].buildSysex;
+    const sendSysex = LAYOUTS[layoutId].sendSysex;
     const params = LAYOUTS[layoutId].params;
     const param = params[idx];
-    const bankNum = parseInt(params[0].value);
 
     value = Math.min(Math.max(value, 0), param.range - 1);
 
@@ -216,11 +218,10 @@ class App extends React.Component {
       preset.values[idx] = value;
       preset.isDirty = true;
 
-      // TODO: Nasty hack for nested state
+      // TODO: Hack for nested state
       this.forceUpdate();
 
-      // TODO: Bank num breaks DSR 2000
-      sendSysex(this.getMidiOutput(), bankNum, buildSysex(params));
+      sendSysex(this.getMidiOutput(), params);
     }
   }
 
