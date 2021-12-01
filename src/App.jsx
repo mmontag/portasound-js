@@ -221,7 +221,7 @@ class App extends React.Component {
       // TODO: Hack for nested state
       this.forceUpdate();
 
-      sendSysex(this.getMidiOutput(), params);
+      sendSysex(this.getMidiOutput(), preset.values);
     }
   }
 

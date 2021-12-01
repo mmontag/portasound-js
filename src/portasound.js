@@ -374,7 +374,8 @@ function hexToBytes(text) {
 }
 
 
-function buildSysexDsr2000(params) {
+function buildSysexDsr2000(values) {
+  const params = paramsDsr2000;
   const header = [
     // Yamaha DSR-2000 voice bulk dump sysex header
     0xF0, 0x43, 0x73, 0x0d, 0x06, 0x50, 0x00, 0x00
@@ -384,7 +385,7 @@ function buildSysexDsr2000(params) {
   const data = [];
   for (let i = 0; i < params.length; i++) {
     const param = params[i];
-    const value = param.valueFn ? param.valueFn(param.value) : param.value;
+    const value = param.valueFn ? param.valueFn(values[i]) : values[i];
     data[param.sysexByte] |= (value << param.sysexBit);
   }
   console.log('data:', bytesToHex(data));
@@ -424,7 +425,8 @@ function checksum(bytes) {
   return checksum;
 }
 
-function buildSysexPss480(params) {
+function buildSysexPss480(values) {
+  const params = paramsPss480;
   const bytes = [
     // Yamaha sysex header
     0xF0, 0x43, 0x76, 0x00,
@@ -445,7 +447,7 @@ function buildSysexPss480(params) {
 
   for (let i = 0; i < params.length; i++) {
     const param = params[i];
-    const value = param.valueFn ? param.valueFn(param.value) : param.value;
+    const value = param.valueFn ? param.valueFn(values[i]) : values[i];
     data[param.sysexByte] |= (value << param.sysexBit);
   }
 
@@ -487,10 +489,10 @@ function bytesToString(data) {
   return ('[' + data.map(n => ('0' + n.toString(16)).slice(-2)).join(' ') + ']').toUpperCase();
 }
 
-function sendSysexPss480(midiOutput, params) {
+function sendSysexPss480(midiOutput, values) {
   // TODO: move bank num out of preset/params
-  const bankNum = parseInt(params[0].value);
-  const bytes = buildSysexPss480(params);
+  const bankNum = parseInt(values[0]);
+  const bytes = buildSysexPss480(values);
   console.log('Sending...', bytesToString(bytes));
   midiOutput.send(bytes);
   // Program Change to force refresh (0 to 4)
@@ -498,8 +500,8 @@ function sendSysexPss480(midiOutput, params) {
 }
 sendSysexPss480 = debounce(sendSysexPss480, 500, { leading: false, trailing: true });
 
-function sendSysexDsr2000(midiOutput, params) {
-  const bytes = buildSysexDsr2000(params);
+function sendSysexDsr2000(midiOutput, values) {
+  const bytes = buildSysexDsr2000(values);
   console.log('Sending...', bytesToString(bytes));
   midiOutput.send(bytes);
 
