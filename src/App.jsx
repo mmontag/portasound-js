@@ -16,6 +16,7 @@ for (let i = 0; i < 3; i++) {
     BANKS[i][j] = {
       name: `Preset ${j}`,
       values: [],
+      isDirty: false,
     };
   }
 }
@@ -85,7 +86,7 @@ class App extends React.Component {
         if (preset.values.length !== layout.params.length) {
           console.log('Preset param length not equal to param definition length. Skipping preset load.');
         } else {
-          presets[i] = preset;
+          presets[i] = { ...preset, isDirty: false };
           // dirty = true;
         }
       }
@@ -96,7 +97,14 @@ class App extends React.Component {
   handleSavePreset = (e) => {
     const { layoutId, presetId } = this.state;
     const preset = LAYOUTS[layoutId].presets[presetId];
-    localStorage.setItem(`bank_${this.state.layoutId}_preset_${this.state.presetId}`, JSON.stringify(preset));
+
+    localStorage.setItem(`bank_${layoutId}_preset_${presetId}`, JSON.stringify({
+      name: preset.name,
+      values: preset.values,
+    }));
+
+    preset.isDirty = false;
+    this.forceUpdate();
   }
 
   handlePresetChange = (e) => {
@@ -204,13 +212,16 @@ class App extends React.Component {
     value = Math.min(Math.max(value, 0), param.range - 1);
 
     // Hidden state
-    preset.values[idx] = value;
+    if (value !== preset.values[idx]) {
+      preset.values[idx] = value;
+      preset.isDirty = true;
 
-    // TODO: Nasty hack for nested state
-    this.forceUpdate();
+      // TODO: Nasty hack for nested state
+      this.forceUpdate();
 
-    // TODO: Bank num breaks DSR 2000
-    sendSysex(this.getMidiOutput(), bankNum, buildSysex(params));
+      // TODO: Bank num breaks DSR 2000
+      sendSysex(this.getMidiOutput(), bankNum, buildSysex(params));
+    }
   }
 
   getMidiOutput = () => {
@@ -254,7 +265,7 @@ class App extends React.Component {
           Preset Memory:{' '}
           <select id="preset" value={presetId} onChange={this.handlePresetChange}>
             {presets.map((preset, idx) => (
-              <option key={idx} value={idx}>{idx}: {preset.name}</option>
+              <option key={idx} value={idx}>{idx}: {preset.name} {preset.isDirty && '*'}</option>
             ))}
           </select>
           <input type="text" onChange={this.handlePresetNameChange} value={presets[presetId].name}/>
