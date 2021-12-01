@@ -12,8 +12,9 @@ export function PSS480(p) {
           <PortasoundSlider {...p.params[idx]} value={p.values[idx]} handleParamChange={p.handleParamChange}/>
         )}
         <div className="button-column">
-          <PortasoundButton {...p.params[35]} value={p.values[35]} handleParamChange={p.handleParamChange}/>
-          <PortasoundButton {...p.params[36]} value={p.values[36]} handleParamChange={p.handleParamChange}/>
+          {[35, 36].map(idx => <>
+            <PortasoundButton {...p.params[idx]} value={p.values[idx]} handleParamChange={p.handleParamChange}/>
+          </>)}
         </div>
       </div>
       <div className="param-subgroup">
@@ -41,8 +42,9 @@ export function PSS480(p) {
           <PortasoundSlider {...p.params[idx]} value={p.values[idx]} handleParamChange={p.handleParamChange}/>
         )}
         <div className="button-column">
-          <PortasoundButton {...p.params[16]} value={p.values[16]} handleParamChange={p.handleParamChange}/>
-          <PortasoundButton {...p.params[18]} value={p.values[18]} handleParamChange={p.handleParamChange}/>
+          {[16, 18].map(idx => <>
+            <PortasoundButton {...p.params[idx]} value={p.values[idx]} handleParamChange={p.handleParamChange}/>
+          </>)}
         </div>
       </div>
       <div className="param-subgroup">
@@ -67,7 +69,6 @@ export function PSS480(p) {
         )}
         <div className="button-column">
           {[15, 17].map(idx => <>
-            <PortasoundButton {...p.params[idx]} value={p.values[idx]} handleParamChange={p.handleParamChange}/>
             <PortasoundButton {...p.params[idx]} value={p.values[idx]} handleParamChange={p.handleParamChange}/>
           </>)}
         </div>
