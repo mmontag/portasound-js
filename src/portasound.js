@@ -318,32 +318,168 @@ const paramsPss480 = [
 ].map((p, i) => { p.idx = i; return p });
 
 const paramsDsr2000 =[];
-const dsrNibbles = [
-  0, 1, 7, 0, 7, 1, 5, 3, 0, 1, 1, 9, 2, 0, 1, 8, 0, 4, 1, 15, 9, 11, 1, 15, 5, 15, 0,
-  15, 0, 0, 1, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2, 0, 1, 0, 3, 0, 3, 1, 0, 3, 4, 0,
-  0, 10, 0, 0, 4, 0, 5, 0, 4, 0, 4, 8, 1, 8, 3, 8, 1, 8, 1, 0, 15, 1, 14, 12, 12, 0, 0,
-  0, 0, 0, 0, 0, 2, 2, 12, 0, 0, 2, 12, 0, 0, 2, 12, 5, 11, 1, 4, 0, 12, 1, 7, 7, 4, 2,
-  1, 5, 2, 0, 1, 0, 0, 0, 0, 0, 1, 0, 7, 0, 4, 0, 4, 0, 4, 12, 9, 4, 5, 0, 4, 0, 4, 3,
-  7, 1, 7, 7, 7, 4, 6, 0, 5, 4, 0, 7, 7, 0, 2, 0, 12, 0, 1, 15, 4, 0, 7, 0, 0];
 
+// Global params
+paramsDsr2000.push(
+  {
+    name: 'Feedback',
+    shortName: 'Feedback',
+    range: 8,
+    sysexByte: 0,
+    sysexBit: 3,
+    value: 0,
+  },
+  {
+    name: 'Algorithm',
+    shortName: 'Algo',
+    range: 8,
+    sysexByte: 0,
+    sysexBit: 0,
+    value: 0,
+  },
+  {
+    name: 'Mono/Poly',
+    shortName: 'Mono',
+    range: 2,
+    sysexByte: 77,
+    sysexBit: 3,
+    value: 0,
+  },
+  {
+    name: 'Chorus',
+    shortName: 'Chorus',
+    range: 2,
+    sysexByte: 77,
+    sysexBit: 0,
+    value: 0,
+  },
+);
 
-let nibs;
-// 02
-nibs = hexToBytes('01080409000100030001010c020b03020004090f010b050f090f000f0009000908090009000000040006040f0f0203020107000601000200030000070000000200030e00090008000800000f010e0c08000000000000000200000000000000000000030d04060004010a0300020100000603000000000000000502070005000507070406000502070005000508090006060903000202060e 0002 00 00 0000 0007 0000');
-
-// 01
-// nibs = hexToBytes('030b0700040003010200010f0108020600000501000f040f0501000f0006000c080600000000000900000605020202020f08000600020201020000040003000400040901080008000b00000f010e0c08000002070001000200000000000000000000030800070000000f0207030205020500000002040003000500050005000508070e07000507070e0704070a0704060005030002010b04 0002 00 01 0000 0007 0000');
-for (let i = 0; i < 162; i++) {
-  paramsDsr2000.push({
-    idx: i,
-    name: 'Param ' + i,
-    shortName: ((i%2)?'':((i/2)|0)),
-    range: 16,
-    sysexByte: (i/2)|0,
-    sysexBit: ((i+1)%2) * 4,
-    value: nibs[i],
-  });
+// Per-operator params
+for (let i = 0; i < 4; i++) {
+  paramsDsr2000.push(
+    {
+      name: 'Frequency Multiplier',
+      shortName: 'Freq',
+      range: 16,
+      sysexByte: 1 + i,
+      sysexBit: 0,
+      value: 1,
+    },
+    {
+      name: 'Total Level',
+      shortName: 'Level',
+      range: 127,
+      sysexByte: 5 + i,
+      sysexBit: 0,
+      value: 60,
+      valueFn: invert64Fn,
+    },
+    {
+      name: 'Attack Rate',
+      shortName: 'Attack',
+      range: 32,
+      sysexByte: 9 + i,
+      sysexBit: 0,
+      value: 30,
+      valueFn: invert32Fn,
+    },
+    {
+      name: 'Decay 1 Rate',
+      shortName: 'Decay 1',
+      range: 32,
+      sysexByte: 13 + i,
+      sysexBit: 0,
+      value: 16,
+      valueFn: invert32Fn,
+    },
+    {
+      name: 'Decay 1 Level',
+      shortName: 'Sustain',
+      range: 16,
+      sysexByte: 21 + i,
+      sysexBit: 4,
+      value: 11,
+    },
+    {
+      name: 'Decay 2 Rate',
+      shortName: 'Decay 2',
+      range: 32,
+      sysexByte: 17 + i,
+      sysexBit: 0,
+      value: 16,
+      valueFn: invert32Fn,
+    },
+    {
+      name: 'Release Rate',
+      shortName: 'Release',
+      range: 16,
+      sysexByte: 21 + i,
+      sysexBit: 0,
+      value: 3,
+      valueFn: invert16Fn,
+    },
+    {
+      name: 'Key Velocity Sensitivity',
+      shortName: 'Touch Sens',
+      range: 8,
+      sysexByte: 29 + i,
+      sysexBit: 0,
+      value: 2,
+    },
+    {
+      name: 'Wave Select',
+      shortName: 'Wave',
+      range: 8,
+      sysexByte: 33 + i,
+      sysexBit: 4,
+      value: 0,
+      valueFn: v => v | 0b1000, // Wave Select Enable bit
+    },
+    {
+      name: 'Amp Mod Enable',
+      shortName: 'Amp Mod Enable',
+      range: 2,
+      sysexByte: 13 + i,
+      sysexBit: 7,
+      value: 0,
+    },
+    {
+      name: 'Detune 2',
+      shortName: 'Detune 2',
+      range: 4,
+      sysexByte: 17 + i,
+      sysexBit: 6,
+      value: 0,
+    },
+    {
+      name: 'Detune 1',
+      shortName: 'Detune 1',
+      range: 16,
+      sysexByte: 33 + i,
+      sysexBit: 0,
+      value: 0,
+    },
+  );
 }
+paramsDsr2000.forEach((p, i) => p.idx = i);
+// let nibs;
+// // 02
+// nibs = hexToBytes('01080409000100030001010c020b03020004090f010b050f090f000f0009000908090009000000040006040f0f0203020107000601000200030000070000000200030e00090008000800000f010e0c08000000000000000200000000000000000000030d04060004010a0300020100000603000000000000000502070005000507070406000502070005000508090006060903000202060e 0002 00 00 0000 0007 0000');
+//
+// // 01
+// // nibs = hexToBytes('030b0700040003010200010f0108020600000501000f040f0501000f0006000c080600000000000900000605020202020f08000600020201020000040003000400040901080008000b00000f010e0c08000002070001000200000000000000000000030800070000000f0207030205020500000002040003000500050005000508070e07000507070e0704070a0704060005030002010b04 0002 00 01 0000 0007 0000');
+// for (let i = 0; i < 162; i++) {
+//   paramsDsr2000.push({
+//     idx: i,
+//     name: 'Param ' + i,
+//     shortName: ((i%2)?'':((i/2)|0)),
+//     range: 16,
+//     sysexByte: (i/2)|0,
+//     sysexBit: ((i+1)%2) * 4,
+//     value: nibs[i],
+//   });
+// }
 
 
 
@@ -357,6 +493,10 @@ function levelFn(val) {
 
 function invert16Fn(val) {
   return 15 - val;
+}
+
+function invert32Fn(val) {
+  return 31 - val;
 }
 
 function invert64Fn(val) {

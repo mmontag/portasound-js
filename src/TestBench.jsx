@@ -1,7 +1,7 @@
 import PortasoundSlider from './PortasoundSlider';
 import React from 'react';
 
-const SLIDERS_PER_GROUP = 8;
+const SLIDERS_PER_GROUP = 32;
 export function TestBench(p) {
   const groups = [];
   for (let j = 0; j < p.params.length / SLIDERS_PER_GROUP; j++) {
