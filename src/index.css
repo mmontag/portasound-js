@@ -35,10 +35,15 @@ img {
 }
 
 select, input[type=text] {
-  color: var(--text);
+  color: #aaa;
   background: var(--darker);
-  border: 1px solid var(--lighter);
+  border: 0;
   padding: 2px 4px;
+  box-sizing: border-box;
+  height: 28px;
+}
+input[type=text] {
+  color: var(--text);
 }
 
 header h1, .label {
@@ -64,20 +69,22 @@ input:focus, select:focus, button:focus {
 
 .param-group {
   display: inline-block;
-  margin: 10px auto;
+  margin: 10px 30px 10px 0;
 }
 h2.param-group-label {
-  text-align: center;
   font-size: 15px;
   font-weight: 500;
+}
+.param-group-label.centered {
   padding: 10px 0;
   display: flex;
   flex-basis: 100%;
+  text-align: center;
   align-items: center;
   margin: 8px 0 8px -8px;
 }
-.param-group-label:before,
-.param-group-label:after {
+.param-group-label.centered:before,
+.param-group-label.centered:after {
   content: "";
   flex-grow: 1;
   background: var(--text);
@@ -191,6 +198,7 @@ button.box-button {
   display: inline-flex;
   width: 64px;
   vertical-align: middle;
+  margin: 0 4px;
 }
 button.box-button:active {
   padding: 5px 3px 2px;
@@ -218,4 +226,34 @@ button.yellow {
 }
 button.yellow:active {
   background-color: #9b8a0a;
+}
+
+header, .app-settings {
+  margin-right: 20px;
+}
+.app-settings p {
+  margin: 4px 0;
+}
+.app-settings label {
+  width: 140px;
+  display: inline-block;
+  color: #aaaaaa;
+  font-size: 14px;
+}
+
+.algorithms {
+  border-collapse: collapse;
+  opacity: 0.8;
+  width: 360px;
+  margin: 30px 20px 0 20px;
+}
+.algorithms td {
+  border: 1px solid #aaa;
+  padding: 0;
+}
+.algorithms img { width: 100%; opacity: 0.8; cursor: pointer; }
+.algorithms img:hover { opacity: 1; }
+.inline {
+  display: inline-block;
+  vertical-align: middle;
 }

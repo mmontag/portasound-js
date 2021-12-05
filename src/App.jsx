@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { sendSysexDsr2000, sendSysexPss480, paramsDsr2000, paramsPss480 } from './portasound';
+import { paramsDsr2000, paramsPss480, sendSysexDsr2000, sendSysexPss480 } from './portasound';
 import MIDIPlayer from 'midiplayer';
 import MIDIFile from 'midifile';
 import { PSS480 } from './PSS480';
@@ -62,7 +62,9 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    navigator.requestMIDIAccess({ sysex: true }).then(this.onMIDISuccess);
+    if (navigator.requestMIDIAccess) {
+      navigator.requestMIDIAccess({ sysex: true }).then(this.onMIDISuccess);
+    }
 
     const storedLayoutId = localStorage.getItem(LAYOUT_KEY);
     if (storedLayoutId != null) {
@@ -196,7 +198,9 @@ class App extends React.Component {
         console.log("Loaded %d bytes.", data.byteLength);
         const midiFile = new MIDIFile(data);
         this.midiPlayer.load(midiFile);
-        this.midiPlayer.play(function() { console.log("MIDI file playback ended."); });
+        this.midiPlayer.play(function () {
+          console.log("MIDI file playback ended.");
+        });
       });
   }
 
@@ -239,39 +243,43 @@ class App extends React.Component {
 
     return (
       <div className="App">
-        <header>
-          <div>
-            <img src="/images/portasound-cyan.png" alt="Portasound"/>
-            <img src="/images/js.png" alt="JS"/>
+        <div className="app-top">
+          <header>
+            <div>
+              <img src="/images/portasound-cyan.png" alt="Portasound"/>
+              <img src="/images/js.png" alt="JS"/>
+            </div>
+            <h1>Sysex Editor for Portasound Series Keyboards</h1>
+          </header>
+          <div className="app-settings">
+            <p>
+              <label htmlFor="midiOutput">MIDI Device:{' '}</label>
+              <select id="midiOutput" value={midiOutputId} onChange={this.handleMidiOutputChange}>
+                {midiOutputs.map(output => (
+                  <option key={output.id} value={output.id}>{output.name}</option>
+                ))}
+              </select>
+            </p>
+            <p>
+              <label htmlFor="layout">Parameter Set:{' '}</label>
+              <select id="layout" value={layoutId} onChange={this.handleLayoutChange}>
+                {LAYOUTS.map((layout, idx) => (
+                  <option key={idx} value={idx}>{layout.name}</option>
+                ))}
+              </select>
+            </p>
+            <p>
+              <label htmlFor="preset">Preset Memory:{' '}</label>
+              <select id="preset" value={presetId} onChange={this.handlePresetChange}>
+                {presets.map((preset, idx) => (
+                  <option key={idx} value={idx}>{idx}: {preset.name} {preset.isDirty && '*'}</option>
+                ))}
+              </select>{' '}
+              <input type="text" onChange={this.handlePresetNameChange} value={presets[presetId].name}/>{' '}
+              <button className="box-button" onClick={this.handleSavePreset}>Save</button>
+            </p>
           </div>
-          <h1>Sysex Editor for Portasound Series Keyboards</h1>
-        </header>
-        <p>
-          MIDI Device:{' '}
-          <select id="midiOutput" value={midiOutputId} onChange={this.handleMidiOutputChange}>
-            {midiOutputs.map(output => (
-              <option key={output.id} value={output.id}>{output.name}</option>
-            ))}
-          </select>
-        </p>
-        <p>
-          Parameter Layout:{' '}
-          <select id="layout" value={layoutId} onChange={this.handleLayoutChange}>
-            {LAYOUTS.map((layout, idx) => (
-              <option key={idx} value={idx}>{layout.name}</option>
-            ))}
-          </select>
-        </p>
-        <p>
-          Preset Memory:{' '}
-          <select id="preset" value={presetId} onChange={this.handlePresetChange}>
-            {presets.map((preset, idx) => (
-              <option key={idx} value={idx}>{idx}: {preset.name} {preset.isDirty && '*'}</option>
-            ))}
-          </select>
-          <input type="text" onChange={this.handlePresetNameChange} value={presets[presetId].name}/>
-          <button className="box-button" onClick={this.handleSavePreset}>Save</button>
-        </p>
+        </div>
         {
           values.length === params.length &&
           <LayoutComponent params={params} values={values} handleParamChange={this.handleParamChange}
