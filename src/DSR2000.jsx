@@ -43,9 +43,9 @@ export function DSR2000(p) {
             <PortasoundSlider {...p.params[idx]} value={p.values[idx]} handleParamChange={p.handleParamChange}/>
           )}
           <div className="button-column">
-            {[16, 18].map(idx => <>
-              <PortasoundButton {...p.params[idx]} value={p.values[idx]} handleParamChange={p.handleParamChange}/>
-            </>)}
+            {[5, 7].map(opToParamIdxFn(op)).map(idx =>
+              <PortasoundButton key={idx} {...p.params[idx]} value={p.values[idx]} handleParamChange={p.handleParamChange}/>
+            )}
           </div>
         </div>
         <div className="param-subgroup">
