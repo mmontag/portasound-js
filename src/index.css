@@ -227,6 +227,13 @@ button.yellow {
 button.yellow:active {
   background-color: #9b8a0a;
 }
+button.cyan {
+  background-color: #20c8a9;
+}
+button.cyan:active {
+  background-color: #1a9f86;
+}
+
 
 header, .app-settings {
   margin-right: 20px;
@@ -244,8 +251,8 @@ header, .app-settings {
 .algorithms {
   border-collapse: collapse;
   opacity: 0.8;
-  width: 360px;
-  margin: 30px 20px 0 20px;
+  width: 386px;
+  margin: 38px 20px 0 20px;
 }
 .algorithms td {
   border: 1px solid #aaa;

@@ -276,6 +276,9 @@ class App extends React.Component {
                 ))}
               </select>{' '}
               <input type="text" onChange={this.handlePresetNameChange} value={presets[presetId].name}/>{' '}
+              {/*
+              TODO
+              <button className="box-button cyan" onClick={this.handleLoadPreset}>Load</button>{' '}*/}
               <button className="box-button" onClick={this.handleSavePreset}>Save</button>
             </p>
           </div>

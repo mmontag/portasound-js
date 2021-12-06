@@ -24,11 +24,11 @@ input[type=range]::-webkit-slider-thumb {
   background: #555;
   background: url("/images/slider-cyan.png");
   background-size: cover;
+  background-position: right;
   /*box-shadow: -5px 0px 2px #0008;*/
   cursor: pointer;
   -webkit-appearance: none;
   margin-top: 0px;
-  transition: position 33ms;
 }
 input[type=range]::-moz-range-track {
   /*width: 100%;*/
