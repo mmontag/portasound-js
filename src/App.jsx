@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { paramsDsr2000, paramsPss480, sendSysexDsr2000, sendSysexPss480 } from './portasound';
+import { paramsDsr2000, paramsPss480, paramsTestBench, sendSysexDsr2000, sendSysexPss480 } from './portasound';
 import MIDIPlayer from 'midiplayer';
 import MIDIFile from 'midifile';
 import { PSS480 } from './PSS480';
@@ -31,7 +31,7 @@ const LAYOUTS = [
     presets: BANKS[0],
   },
   {
-    name: 'Yamaha DSR-2000',
+    name: 'Yamaha DSR-1000/2000',
     params: paramsDsr2000,
     componentClass: DSR2000,
     sendSysex: sendSysexDsr2000,
@@ -39,7 +39,7 @@ const LAYOUTS = [
   },
   {
     name: 'DSR-2000 Test Bench',
-    params: paramsDsr2000,
+    params: paramsTestBench,
     componentClass: TestBench,
     sendSysex: sendSysexDsr2000,
     presets: BANKS[2],

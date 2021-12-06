@@ -322,18 +322,26 @@ const paramsDsr2000 =[];
 // Global params
 paramsDsr2000.push(
   {
+    name: 'Algorithm',
+    shortName: 'Algorithm',
+    range: 8,
+    sysexByte: 0,
+    sysexBit: 0,
+    value: 7,
+  },
+  {
     name: 'Feedback',
     shortName: 'Feedback',
     range: 8,
     sysexByte: 0,
     sysexBit: 3,
-    value: 0,
+    value: 5,
   },
   {
-    name: 'Algorithm',
-    shortName: 'Algo',
+    name: 'Touch Sensitivity',
+    shortName: 'Touch Sens',
     range: 8,
-    sysexByte: 0,
+    sysexByte: 79,
     sysexBit: 0,
     value: 0,
   },
@@ -342,7 +350,7 @@ paramsDsr2000.push(
     shortName: 'Mono',
     range: 2,
     sysexByte: 77,
-    sysexBit: 3,
+    sysexBit: 4,
     value: 0,
   },
   {
@@ -353,11 +361,92 @@ paramsDsr2000.push(
     sysexBit: 0,
     value: 0,
   },
+  {
+    name: 'LFO Key Sync',
+    shortName: 'Key Sync',
+    range: 2,
+    sysexByte: 0,
+    sysexBit: 6,
+    value: 0,
+  },
+  {
+    name: 'LFO Waveform',
+    shortName: 'Wave',
+    range: 4,
+    sysexByte: 43,
+    sysexBit: 0,
+    value: 2,
+  },
+  {
+    name: 'LFO Frequency',
+    shortName: 'Freq',
+    range: 256,
+    sysexByte: 39,
+    sysexBit: 0,
+    value: 192,
+  },
+  {
+    name: 'LFO Delay 2',
+    shortName: 'Delay',
+    range: 128,
+    sysexByte: 41,
+    sysexBit: 0,
+    value: 10,
+  },
+  {
+    name: 'LFO Delay',
+    shortName: 'Ramp',
+    range: 128,
+    sysexByte: 42,
+    sysexBit: 0,
+    value: 10,
+  },
+  {
+    name: 'Pitch Modulation Depth',
+    shortName: 'Pitch Depth',
+    range: 128,
+    sysexByte: 37,
+    sysexBit: 0,
+    value: 0,
+  },
+  {
+    name: 'Amplitude Modulation Depth',
+    shortName: 'Amp Depth',
+    range: 128,
+    sysexByte: 38,
+    sysexBit: 0,
+    value: 0,
+  },
+  {
+    name: 'Pitch Modulation Sensitivity',
+    shortName: 'Pitch Sens',
+    range: 8,
+    sysexByte: 40,
+    sysexBit: 4,
+    value: 0,
+  },
+  {
+    name: 'Amplitude Modulation Sensitivity',
+    shortName: 'Amp Sens',
+    range: 4,
+    sysexByte: 40,
+    sysexBit: 0,
+    value: 0,
+  },
 );
 
 // Per-operator params
 for (let i = 0; i < 4; i++) {
   paramsDsr2000.push(
+    {
+      name: 'Total Level',
+      shortName: 'Level',
+      range: 64,
+      sysexByte: 5 + i,
+      sysexBit: 0,
+      value: i === 0 ? 48 : 0,
+      valueFn: invert64Fn,
+    },
     {
       name: 'Frequency Multiplier',
       shortName: 'Freq',
@@ -367,13 +456,61 @@ for (let i = 0; i < 4; i++) {
       value: 1,
     },
     {
-      name: 'Total Level',
-      shortName: 'Level',
-      range: 127,
-      sysexByte: 5 + i,
-      sysexBit: 0,
-      value: 60,
-      valueFn: invert64Fn,
+      name: 'Wave Select',
+      shortName: 'Wave',
+      range: 8,
+      sysexByte: 33 + i,
+      sysexBit: 4,
+      value: 0,
+      valueFn: v => v | 0b1000, // Wave Select Enable bit
+    },
+    {
+      name: 'Fixed Range',
+      shortName: 'Fixed Octave',
+      range: 8,
+      sysexByte: 1 + i,
+      sysexBit: 4,
+      value: 0,
+    },
+    {
+      name: 'Detune 1',
+      shortName: 'Detune 1',
+      range: 8,
+      sysexByte: 29 + i,
+      sysexBit: 4,
+      value: 0,
+    },
+    // {
+    //   name: 'Detune 2',
+    //   shortName: 'Detune 2',
+    //   range: 8,
+    //   sysexByte: 17 + i,
+    //   sysexBit: 5,
+    //   value: 0,
+    // },
+    {
+      name: 'Amp Mod Enable',
+      shortName: 'Amp Mod Enable',
+      range: 2,
+      sysexByte: 13 + i,
+      sysexBit: 7,
+      value: 0,
+    },
+    {
+      name: 'Unknown',
+      shortName: 'Unknown',
+      range: 2,
+      sysexByte: 1 + i,
+      sysexBit: 7,
+      value: 0,
+    },
+    {
+      name: 'Fixed Frequency',
+      shortName: 'Fixed Frequency',
+      range: 2,
+      sysexByte: 9 + i,
+      sysexBit: 5,
+      value: 0,
     },
     {
       name: 'Attack Rate',
@@ -381,7 +518,7 @@ for (let i = 0; i < 4; i++) {
       range: 32,
       sysexByte: 9 + i,
       sysexBit: 0,
-      value: 30,
+      value: 2,
       valueFn: invert32Fn,
     },
     {
@@ -390,7 +527,7 @@ for (let i = 0; i < 4; i++) {
       range: 32,
       sysexByte: 13 + i,
       sysexBit: 0,
-      value: 16,
+      value: 28,
       valueFn: invert32Fn,
     },
     {
@@ -400,6 +537,7 @@ for (let i = 0; i < 4; i++) {
       sysexByte: 21 + i,
       sysexBit: 4,
       value: 11,
+      valueFn: invert16Fn,
     },
     {
       name: 'Decay 2 Rate',
@@ -407,7 +545,7 @@ for (let i = 0; i < 4; i++) {
       range: 32,
       sysexByte: 17 + i,
       sysexBit: 0,
-      value: 16,
+      value: 31,
       valueFn: invert32Fn,
     },
     {
@@ -428,58 +566,52 @@ for (let i = 0; i < 4; i++) {
       value: 2,
     },
     {
-      name: 'Wave Select',
-      shortName: 'Wave',
-      range: 8,
-      sysexByte: 33 + i,
+      name: 'Level Key Scaling (Low)',
+      shortName: 'Level (Low)',
+      range: 16,
+      sysexByte: 25 + i,
+      sysexBit: 0,
+      value: 0,
+    },
+    {
+      name: 'Level Key Scaling (High)',
+      shortName: 'Level (High)',
+      range: 16,
+      sysexByte: 25 + i,
       sysexBit: 4,
       value: 0,
-      valueFn: v => v | 0b1000, // Wave Select Enable bit
     },
     {
-      name: 'Amp Mod Enable',
-      shortName: 'Amp Mod Enable',
-      range: 2,
-      sysexByte: 13 + i,
-      sysexBit: 7,
-      value: 0,
-    },
-    {
-      name: 'Detune 2',
-      shortName: 'Detune 2',
+      name: 'Rate Key Scaling',
+      shortName: 'Rate',
       range: 4,
-      sysexByte: 17 + i,
+      sysexByte: 9 + i,
       sysexBit: 6,
-      value: 0,
-    },
-    {
-      name: 'Detune 1',
-      shortName: 'Detune 1',
-      range: 16,
-      sysexByte: 33 + i,
-      sysexBit: 0,
       value: 0,
     },
   );
 }
 paramsDsr2000.forEach((p, i) => p.idx = i);
-// let nibs;
-// // 02
-// nibs = hexToBytes('01080409000100030001010c020b03020004090f010b050f090f000f0009000908090009000000040006040f0f0203020107000601000200030000070000000200030e00090008000800000f010e0c08000000000000000200000000000000000000030d04060004010a0300020100000603000000000000000502070005000507070406000502070005000508090006060903000202060e 0002 00 00 0000 0007 0000');
-//
-// // 01
-// // nibs = hexToBytes('030b0700040003010200010f0108020600000501000f040f0501000f0006000c080600000000000900000605020202020f08000600020201020000040003000400040901080008000b00000f010e0c08000002070001000200000000000000000000030800070000000f0207030205020500000002040003000500050005000508070e07000507070e0704070a0704060005030002010b04 0002 00 01 0000 0007 0000');
-// for (let i = 0; i < 162; i++) {
-//   paramsDsr2000.push({
-//     idx: i,
-//     name: 'Param ' + i,
-//     shortName: ((i%2)?'':((i/2)|0)),
-//     range: 16,
-//     sysexByte: (i/2)|0,
-//     sysexBit: ((i+1)%2) * 4,
-//     value: nibs[i],
-//   });
-// }
+
+// Test Bench setup
+const paramsTestBench = [];
+let nibs;
+// 02
+nibs = hexToBytes('01080409000100030001010c020b03020004090f010b050f090f000f0009000908090009000000040006040f0f0203020107000601000200030000070000000200030e00090008000800000f010e0c08000000000000000200000000000000000000030d04060004010a0300020100000603000000000000000502070005000507070406000502070005000508090006060903000202060e 0002 00 00 0000 0007 0000');
+
+// 01
+// nibs = hexToBytes('030b0700040003010200010f0108020600000501000f040f0501000f0006000c080600000000000900000605020202020f08000600020201020000040003000400040901080008000b00000f010e0c08000002070001000200000000000000000000030800070000000f0207030205020500000002040003000500050005000508070e07000507070e0704070a0704060005030002010b04 0002 00 01 0000 0007 0000');
+for (let i = 0; i < 162; i++) {
+  paramsTestBench.push({
+    idx: i,
+    name: 'Param ' + i,
+    shortName: ((i%2)?'':((i/2)|0)),
+    range: 16,
+    sysexByte: (i/2)|0,
+    sysexBit: ((i+1)%2) * 4,
+    value: nibs[i],
+  });
+}
 
 
 
@@ -522,12 +654,17 @@ function buildSysexDsr2000(values) {
   ];
   const length = [ 0x0a, 0x05 ];
 
-  const data = [];
+  const data = new Array(81).fill(0);
   for (let i = 0; i < params.length; i++) {
     const param = params[i];
     const value = param.valueFn ? param.valueFn(values[i]) : values[i];
     data[param.sysexByte] |= (value << param.sysexBit);
   }
+  // for (let i = 61; i < 73; i++) data[i] = 0xff; // messing around
+  // for (let i = 54; i < 58; i++) data[i] = 0xff;
+  // [49, 52, 59, 80].forEach(i => data[i] = 0b11111111);
+  // data[73] = 0b00000111;
+  data[51] = 16; // Total Level attenuation
   console.log('data:', bytesToHex(data));
 
   const voiceNum = 0x01;
@@ -655,4 +792,5 @@ export {
   sendSysexDsr2000,
   paramsPss480,
   paramsDsr2000,
+  paramsTestBench,
 };

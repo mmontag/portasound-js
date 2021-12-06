@@ -3,7 +3,7 @@ import React from 'react';
 import PortasoundButton from './PortasoundButton';
 
 const NUM_OPERATOR_PARAMS = 17;
-const FIRST_OPERATOR_PARAM_IDX = 13;
+const FIRST_OPERATOR_PARAM_IDX = 14;
 function opToParamIdxFn(op) {
   const opIdx = {1: 3, 2: 1, 3: 2, 4: 0}[op];
   return paramIdx => {
@@ -46,7 +46,7 @@ export function DSR2000(p) {
       </div>
       <div className="param-subgroup">
         <h3 className="label">Low Freq Oscillator</h3>
-        {[5, 6, 7, 8, 9, 10, 11, 12].map(idx =>
+        {[6, 7, 8, 9, 10, 11, 12, 13].map(idx =>
           <PortasoundSlider key={idx} {...p.params[idx]} value={p.values[idx]} handleParamChange={p.handleParamChange}/>
         )}
       </div>
